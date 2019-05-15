@@ -99,7 +99,8 @@ class Wp_Ajax_Public {
 		global $wp_query;
 
 		// register our main script but do not enqueue it yet.
-	 	wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-ajax-public.js', array( 'jquery' ), $this->version, false );
+	 	// wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-ajax-public.js', array( 'jquery' ), $this->version, false );
+	 	wp_register_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-ajax-public.js', array( 'jquery' ), date('Ymdhis'), false );
 
 	 	// add php-vars to dom CDATA so JS can use.
 	 	wp_localize_script( $this->plugin_name,  'wp_ajax_params', [
@@ -124,7 +125,6 @@ class Wp_Ajax_Public {
 		$args = json_decode( stripslashes( $_POST['query'] ), true );
 
 		$args['paged']       = $_POST['page'];
-		// $args['paged']       = $_POST['page'] ? $_POST['page'] : 0;
 		$args['post_status'] = 'publish';
 		// wp_send_json($args);die;
 
@@ -191,7 +191,7 @@ class Wp_Ajax_Public {
 			<article class="wp-ajax-feed">
 				<p>load posts here</p>
 			</article>
-			<button class="wp-ajax-loadmore">load more</button>
+			<button class="wp-ajax-load">load more</button>
 		</div>
 		<?php
 		return ob_get_clean();
