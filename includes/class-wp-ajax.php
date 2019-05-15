@@ -180,6 +180,9 @@ class Wp_Ajax {
 
 		$this->loader->add_action( 'init', $plugin_public, 'add_ajax_shortcode' );
 
+		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'taxosearch_groupby' );
+
+
 	}
 
 	/**

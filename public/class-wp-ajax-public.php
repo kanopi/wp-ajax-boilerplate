@@ -126,7 +126,7 @@ class Wp_Ajax_Public {
 
 		$args['paged']       = $_POST['page'];
 		$args['post_status'] = 'publish';
-		// wp_send_json($args);die;
+		// wp_send_json($args); die;
 
 		// it is always better to use WP_Query but not here
 		query_posts( $args );
@@ -181,8 +181,6 @@ class Wp_Ajax_Public {
 
 	/**
 	 * Wp Ajax Shortcode
-	 *
-	 * @since    1.0.0
 	 */
 	public function ajax_shortcode() {
 		ob_start();
@@ -199,11 +197,41 @@ class Wp_Ajax_Public {
 
 	/**
 	 * Add Wp Ajax Shortcode
-	 *
-	 * @since    1.0.0
 	 */
 	public function add_ajax_shortcode() {
 		add_shortcode('ajax',[$this,'ajax_shortcode']);
+	}
+
+	/**
+	 * Search Within a Taxonomy
+	 *
+	 * Support search with tax_query args
+	 *
+	 * $query = new WP_Query( array(
+	 *  'search_tax_query' => true,
+	 *  's' => $keywords,
+	 *  'tax_query' => array( array(
+	 *      'taxonomy' => 'country',
+	 *      'field' => 'id',
+	 *      'terms' => $country,
+	 *  ) ),
+	 * ) );
+	 */
+	public function taxosearch_groupby( $q ) {
+		if ( is_admin() ) {
+			return;
+		}
+
+		$wp_query_search_tax_query = filter_var( $q->get( 'search_tax_query' ), FILTER_VALIDATE_BOOLEAN );
+
+		// WP_Query has 'tax_query', 's' and custom 'search_tax_query' argument passed.
+		if ( $wp_query_search_tax_query && $q->get( 'tax_query' ) && $q->get( 's' ) ) {
+			add_filter( 'posts_groupby', [ $this, 'taxosearch_posts_groupby' ], 10, 1 );
+		}
+	}
+
+	public function taxosearch_posts_groupby( $groupby ) {
+		return '';
 	}
 
 }
