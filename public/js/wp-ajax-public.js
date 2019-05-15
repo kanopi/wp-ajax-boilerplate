@@ -190,8 +190,7 @@
 									});
 
 								}else{
-									// console.log('wpAjax.vars.query_params',wpAjax.vars.query_params);
-									// console.log('index',index);
+
 									taxTerms = wpAjax.vars.query_params[index];
 									taxQueryHolder.push({
 										"taxonomy": index,
@@ -230,19 +229,6 @@
 			}
 
 
-			// add non s&f-pro tax-query if needed
-			if(wpAjax.vars.taxo!=="none"&&wpAjax.vars.terms!=="all"){
-
-				addTaxQuery = true;
-
-				taxQueryHolder.push({
-					"taxonomy": wpAjax.vars.taxo,
-					"field": "slug",
-					"terms": wpAjax.vars.terms
-				});
-
-			}
-
 			if(addTaxQuery){
 
 					wpAjax.vars.args["tax_query"] = taxQueryHolder;
@@ -255,7 +241,7 @@
 						delete wpAjax.vars.args["tax_query"];
 				}
 			}
-			
+
 
 			if(addMetaQuery){
 
@@ -294,8 +280,6 @@
 		  **/
 		buildLoopItem : function(currentSet){
 
-			// console.log('buildLoopItem currentSet',currentSet)
-
 			var returnElement = '';
 
 			for (var index in currentSet) {
@@ -319,7 +303,6 @@
 
 			}
 
-			// console.log('end buildLoopItem currentSet');
 			return returnElement;
 
 		}
@@ -333,7 +316,6 @@
 
  		wpAjax.init();
 
-		// alert(2);
  		// Load-More Button Clicked
  		$('.wp-ajax-load').click("click",function(e){
 
