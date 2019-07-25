@@ -182,17 +182,36 @@ class Wp_Ajax_Public {
 	/**
 	 * Wp Ajax Shortcode
 	 */
-	public function ajax_shortcode() {
+	function ajax_shortcode( $props ) {
+
+		$props = shortcode_atts( [ 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax' );
+		$attrs = [ 'class' => 'wp-ajax-wrap' ];
+
+		if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
+			$attrs[ $props['taxo'] ] = $props['term'];
+		endif;
+
 		ob_start();
+		// output attributes on wrapper, need nicer way to do this.
+		if ( ! empty( $attrs ) ) :
+			echo '<div';
+			foreach ( $attrs as $att => $val ) :
+				echo ' ' . esc_html( $att ) . '="' . esc_attr( $val ) . '"';
+			endforeach;
+			echo '>';
+		else :
+			echo '<div>';
+		endif;
 		?>
-		<div class="wp-ajax-wrap">
 			<article class="wp-ajax-feed">
 				<p>load posts here</p>
 			</article>
 			<button class="wp-ajax-load">load more</button>
-		</div>
+
 		<?php
+		echo '</div>';
 		return ob_get_clean();
+
 	}
 
 	/**
