@@ -7,30 +7,116 @@
 		* Initial Variables
 		**/
 		vars : {
-			page: 1,
-			taxo: "none",
-			terms: "all",
-			isFirstClick: true,
-			containerWrap: $('.wp-ajax-wrap'),
-			container: $('.wp-ajax-feed'),
-			button: $('.wp-ajax-load'),
-			limit: 2,
-			loadMoreLimit: 2,
-			postType:"post",
-			dataAction:"admin_ajax_handler",
-			args: {
-				posts_per_page: 2,
-				post_type: "post",
-			},
-			query: "",
-			data: {},
-			onPage: 0,
+			dataAction : "admin_ajax_handler",
+			loops : {},
+			containerWraps : document.getElementsByClassName( 'wp-ajax-wrap' ),
+			container : 'wp-ajax-feed',
+			button : 'wp-ajax-load',
 		},
+		/*
+		* Build data-models for each loop
+		**/
+		setup : function(){
+			if ( wpAjax.vars.containerWraps.length ) {
+				for ( var i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
+				// for ( var i in wpAjax.vars.containerWraps ) {
+
+					wpAjax.vars.loops[i] = {
+						// 'el' : wpAjax.vars.containerWraps[i], // todo: reduce?
+						'vars' : {
+							page : 1,
+							limit : 2,
+							loadMoreLimit : 2,
+							isFirstClick : true,
+							postType:"post",
+							taxo : "none",
+							terms : "all",
+							args : {
+								posts_per_page : 2,
+								post_type : "post",
+							},
+							query : "",
+							data : {},
+							onPage : 0,
+						},
+					};
+
+				}
+			}
+		},
+
 		/*
 		* Load initial view / all-projects
 		**/
 		init : function(){
 
+			console.log( 'init: wpAjax.vars', wpAjax.vars );
+			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
+
+				for ( var i in wpAjax.vars.loops ) {
+
+					wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+
+					wpAjax.vars.loops[i].vars.data = {
+						'action': wpAjax.vars.dataAction,
+						'query': wpAjax.vars.loops[i].vars.query,
+						'page' : wpAjax.vars.loops[i].vars.page,
+					};
+
+					wpAjax.vars.loops[i].vars['p'] = $.when();
+
+					wpAjax.vars.loops[i].vars['p'] = wpAjax.vars.loops[i].vars['p'].then(function(){
+						wpAjax.init_ajax( i );
+					});
+
+					// // todo: build queue, rather than fire off a request for each
+					// $.ajax({
+					// 	url : wp_ajax_params.ajaxurl, // AJAX handler
+					// 	data : wpAjax.vars.loops[i].vars.data,
+					// 	type : 'POST',
+					// 	dataType: 'json',
+					// 	beforeSend : function ( xhr ) {
+					//
+					// 		wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ... ' + i;
+					// 		// wpAjax.vars.loops[i].el.getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ...';
+					//
+					// 	},
+					// 	success : function( data ){
+					//
+					// 		console.log(i,data);
+					// 		if( data ) {
+					//
+					// 			if( data.info.found_posts > 0 ){
+					//
+					// 				wpAjax.vars.foundPosts = data.info.found_posts;
+					//
+					// 				var outputElement = wpAjax.buildLoopItem(data.loop);
+					//
+					// 				wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( outputElement );
+					//
+					//
+					// 				wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
+					//
+					// 				wpAjax.vars.page++;
+					//
+					// 			}else{
+					//
+					// 				wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
+					//
+					// 				wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+					//
+					// 			}
+					//
+					// 		} else {
+					// 			wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+					// 		}
+					// 	}
+					// });
+
+				}
+			}
+
+			/*
 			wpAjax.vars.query = JSON.stringify(wpAjax.vars.args);
 
 			wpAjax.vars.data = {
@@ -74,7 +160,54 @@
 					}
 				}
 			});
+			*/
 
+		},
+
+		init_ajax : function( i ) {
+			 // todo: build queue, rather than fire off a request for each
+			return $.ajax({
+				url : wp_ajax_params.ajaxurl, // AJAX handler
+				data : wpAjax.vars.loops[i].vars.data,
+				type : 'POST',
+				dataType: 'json',
+				beforeSend : function ( xhr ) {
+
+					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ... ' + i;
+					// wpAjax.vars.loops[i].el.getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ...';
+
+				},
+				success : function( data ){
+
+					console.log(i,data);
+					if( data ) {
+
+						if( data.info.found_posts > 0 ){
+
+							wpAjax.vars.foundPosts = data.info.found_posts;
+
+							var outputElement = wpAjax.buildLoopItem(data.loop);
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', outputElement );
+
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
+
+							wpAjax.vars.page++;
+
+						}else{
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+
+						}
+
+					} else {
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+					}
+				}
+			});
 		},
 		/*
 		* Handle Requests to Load More Data
@@ -305,6 +438,14 @@
 
 			return returnElement;
 
+		},
+
+		isEmpty : function(obj) {
+			for(var key in obj) {
+				if(obj.hasOwnProperty(key))
+				return false;
+			}
+			return true;
 		}
 
 	}
@@ -312,7 +453,9 @@
 
 	$(document).ready(function(){
 
-		wpAjax.applyTerms();
+		wpAjax.setup();
+
+		// wpAjax.applyTerms();
 
 		wpAjax.init();
 
