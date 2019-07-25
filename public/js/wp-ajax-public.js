@@ -1,12 +1,12 @@
 (function( $ ) {
 	'use strict';
 
-	 var wpAjax = {
+	var wpAjax = {
 
 		/*
- 		 * Initial Variables
- 		  **/
- 		vars : {
+		* Initial Variables
+		**/
+		vars : {
 			page: 1,
 			taxo: "none",
 			terms: "all",
@@ -25,10 +25,10 @@
 			query: "",
 			data: {},
 			onPage: 0,
- 		},
+		},
 		/*
-		 * Load initial view / all-projects
-		  **/
+		* Load initial view / all-projects
+		**/
 		init : function(){
 
 			wpAjax.vars.query = JSON.stringify(wpAjax.vars.args);
@@ -77,8 +77,8 @@
 
 		},
 		/*
-		 * Handle Requests to Load More Data
-		  **/
+		* Handle Requests to Load More Data
+		**/
 		loadMore : function(e){
 
 			wpAjax.vars.args['posts_per_page'] = wpAjax.vars.limit;
@@ -121,9 +121,9 @@
 			});
 		},
 		/*
-		 * Check for query-params & add to tax-query
-		 * For example purposes only (at the moment)
-		  **/
+		* Check for query-params & add to tax-query
+		* For example purposes only (at the moment)
+		**/
 		applyTerms : function(){
 
 			wpAjax.vars.args["tax_query"] = [];
@@ -137,10 +137,10 @@
 
 			var metaQueryHolder_FilterByPerson = {};
 			var metaQueryHolder_OmitFromArchive = {};
-      var metaQueryHolder_pin_archive = {};
+			var metaQueryHolder_pin_archive = {};
 			// metaQueryHolder_FilterByPerson["relation"] = "AND";
 			metaQueryHolder_OmitFromArchive["relation"] = "OR";
-      metaQueryHolder_pin_archive["relation"] = "OR";
+			metaQueryHolder_pin_archive["relation"] = "OR";
 
 			var addTaxQuery = false;
 			var addMetaQuery = false;
@@ -175,34 +175,34 @@
 
 						switch (index) {
 
-						  case 'post_tag':
+							case 'post_tag':
 
-								addTaxQuery = true;
+							addTaxQuery = true;
 
-								if(wpAjax.vars.query_params[index].indexOf('+')!==-1){
+							if(wpAjax.vars.query_params[index].indexOf('+')!==-1){
 
-									taxTerms = wpAjax.vars.query_params[index].split('+');
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms,
-										"operator": "AND"
-									});
+								taxTerms = wpAjax.vars.query_params[index].split('+');
+								taxQueryHolder.push({
+									"taxonomy": index,
+									"field": "slug",
+									"terms": taxTerms,
+									"operator": "AND"
+								});
 
-								}else{
+							}else{
 
-									taxTerms = wpAjax.vars.query_params[index];
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms
-									});
+								taxTerms = wpAjax.vars.query_params[index];
+								taxQueryHolder.push({
+									"taxonomy": index,
+									"field": "slug",
+									"terms": taxTerms
+								});
 
-								}
+							}
 
-						    break;
+							break;
 
-						  // case 'sort_order':
+							// case 'sort_order':
 							//
 							// 	sortOrder = wpAjax.vars.query_params[index].split('+');
 							// 	if(sortOrder[0].length){
@@ -212,14 +212,14 @@
 							// 		wpAjax.vars.args["order"] = sortOrder[1].toUpperCase();
 							// 	}
 							//
-						  //   break;
+							//   break;
 							//
 							// case 's':
 							//
 							// 	addSearchQuery = true;
 							// 	wpAjax.vars.args["s"] = decodeURIComponent(wpAjax.vars.query_params[index]);
 							//
-						  //   break;
+							//   break;
 
 						}
 
@@ -231,14 +231,14 @@
 
 			if(addTaxQuery){
 
-					wpAjax.vars.args["tax_query"] = taxQueryHolder;
-					if(addSearchQuery){
-						wpAjax.vars.args["search_tax_query"] = true;
-					}
+				wpAjax.vars.args["tax_query"] = taxQueryHolder;
+				if(addSearchQuery){
+					wpAjax.vars.args["search_tax_query"] = true;
+				}
 
 			}else{
 				if(wpAjax.vars.args["tax_query"]){
-						delete wpAjax.vars.args["tax_query"];
+					delete wpAjax.vars.args["tax_query"];
 				}
 			}
 
@@ -255,10 +255,10 @@
 
 				if(wpAjax.vars.args["post_type"]==="person"){
 					if(!$.isEmptyObject(metaQueryHolder_lastname)){
-	          metaQueryHolder.push(metaQueryHolder_lastname)
+						metaQueryHolder.push(metaQueryHolder_lastname)
 					}
-	        if(!$.isEmptyObject(metaQueryHolder_pin_archive)){
-	          metaQueryHolder.push(metaQueryHolder_pin_archive)
+					if(!$.isEmptyObject(metaQueryHolder_pin_archive)){
+						metaQueryHolder.push(metaQueryHolder_pin_archive)
 					}
 				}
 
@@ -266,7 +266,7 @@
 
 			}else{
 				if(wpAjax.vars.args["meta_query"]){
-						delete wpAjax.vars.args["meta_query"];
+					delete wpAjax.vars.args["meta_query"];
 				}
 			}
 
@@ -276,8 +276,8 @@
 
 		},
 		/*
-		 * HTML Template for Each Row of Data
-		  **/
+		* HTML Template for Each Row of Data
+		**/
 		buildLoopItem : function(currentSet){
 
 			var returnElement = '';
@@ -286,19 +286,19 @@
 
 				returnElement += '<div class="teaser teaser--'+currentSet[index]['post_type']+'">';
 
-					returnElement += '<div class="teaser--content">';
-						if(currentSet[index]['crumbs']){
-							returnElement += '<div class="teaser--meta">'+currentSet[index]['crumbs']+'</div>';
-						}
-						returnElement += '<h3 class="teaser--title"><a class="teaser--link" href="'+currentSet[index]['the_permalink']+'" aria-label="'+currentSet[index]['the_title']+'">'+currentSet[index]['the_title']+'</a></h3>';
-						returnElement += '<div class="teaser--excerpt">'+currentSet[index]['the_excerpt']+'</div>';
-						if(currentSet[index]['post_type']=='post'){
-							returnElement += '<div class="teaser--posted-on">'+currentSet[index]['posted_date']+'</div>';
-						}
-						if(currentSet[index]['focus_areas']){
-							returnElement += '<div class="teaser--terms">'+currentSet[index]['focus_areas']+'</div>';
-						}
-					returnElement += '</div>';
+				returnElement += '<div class="teaser--content">';
+				if(currentSet[index]['crumbs']){
+					returnElement += '<div class="teaser--meta">'+currentSet[index]['crumbs']+'</div>';
+				}
+				returnElement += '<h3 class="teaser--title"><a class="teaser--link" href="'+currentSet[index]['the_permalink']+'" aria-label="'+currentSet[index]['the_title']+'">'+currentSet[index]['the_title']+'</a></h3>';
+				returnElement += '<div class="teaser--excerpt">'+currentSet[index]['the_excerpt']+'</div>';
+				if(currentSet[index]['post_type']=='post'){
+					returnElement += '<div class="teaser--posted-on">'+currentSet[index]['posted_date']+'</div>';
+				}
+				if(currentSet[index]['focus_areas']){
+					returnElement += '<div class="teaser--terms">'+currentSet[index]['focus_areas']+'</div>';
+				}
+				returnElement += '</div>';
 				returnElement += '</div>';
 
 			}
@@ -307,26 +307,26 @@
 
 		}
 
-	 }
+	}
 
 
-	 $(document).ready(function(){
+	$(document).ready(function(){
 
- 		wpAjax.applyTerms();
+		wpAjax.applyTerms();
 
- 		wpAjax.init();
+		wpAjax.init();
 
- 		// Load-More Button Clicked
- 		$('.wp-ajax-load').click("click",function(e){
+		// Load-More Button Clicked
+		$('.wp-ajax-load').click("click",function(e){
 
 			wpAjax.applyTerms();
 
- 			wpAjax.loadMore(e);
+			wpAjax.loadMore(e);
 
- 		});
+		});
 
 
- 	});
+	});
 
 
 })( jQuery );
