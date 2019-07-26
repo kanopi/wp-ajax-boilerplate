@@ -13,16 +13,17 @@
 			container : 'wp-ajax-feed',
 			button : 'wp-ajax-load',
 		},
+
 		/*
 		* Build data-models for each loop
 		**/
 		setup : function(){
 			if ( wpAjax.vars.containerWraps.length ) {
 				for ( var i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
-				// for ( var i in wpAjax.vars.containerWraps ) {
 
-					wpAjax.vars.loops[i] = {
-						// 'el' : wpAjax.vars.containerWraps[i], // todo: reduce?
+					wpAjax.vars.containerWraps[ i ].setAttribute( 'wp-ajax-wrap--index', i ); // consider using attribute rather than css class but remember attributes are local filter/query vars
+
+					wpAjax.vars.loops[ i ] = {
 						'vars' : {
 							page : 1,
 							limit : 2,
@@ -50,11 +51,14 @@
 		**/
 		init : function(){
 
-			console.log( 'init: wpAjax.vars', wpAjax.vars );
+			// console.log( 'init: wpAjax.vars', wpAjax.vars );
 			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
 
 				for ( var i in wpAjax.vars.loops ) {
 
+					if ( i > 0  ) {
+						wpAjax.vars.loops[i].vars.args.post_type = "page";
+					}
 					wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
 
 					wpAjax.vars.loops[i].vars.data = {
@@ -92,9 +96,9 @@
 					console.log(i,data);
 					if( data ) {
 
-						if( data.info.found_posts > 0 ){
+						if( data.info.found_posts > 0 ) {
 
-							wpAjax.vars.foundPosts = data.info.found_posts;
+							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
 
 							var outputElement = wpAjax.buildLoopItem(data.loop);
 
@@ -103,9 +107,9 @@
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
 
-							wpAjax.vars.page++;
+							wpAjax.vars.loops[i].vars.page++;
 
-						}else{
+						} else {
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
 
@@ -117,57 +121,68 @@
 						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
 					}
 				}
-			});
+			} );
 		},
+
 		/*
 		* Handle Requests to Load More Data
 		**/
-		loadMore : function(e){
+		loadMore : function( e ) {
 
-			wpAjax.vars.args['posts_per_page'] = wpAjax.vars.limit;
-			wpAjax.vars.args['post_type'] = 'post';
-			wpAjax.vars.args['page'] = wpAjax.vars.page;
+			var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
 
-			wpAjax.vars.query = JSON.stringify(wpAjax.vars.args);
+			if ( i > 0  ) {
+				wpAjax.vars.loops[i].vars.args.post_type = "page";
+			}
+			wpAjax.vars.loops[i].vars.args['posts_per_page'] = wpAjax.vars.loops[i].vars.limit;
+			wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.args.postType;
+			wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
 
-			wpAjax.vars.data = {
+			wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+
+			wpAjax.vars.loops[i].vars.data = {
 				'action': wpAjax.vars.dataAction,
-				'query': wpAjax.vars.query,
-				'page' : wpAjax.vars.page,
+				'query': wpAjax.vars.loops[i].vars.query,
+				'page' : wpAjax.vars.loops[i].vars.page,
 			};
 
 			$.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
-				data : wpAjax.vars.data,
+				data : wpAjax.vars.loops[i].vars.data,
 				type : 'POST',
 				dataType: 'json',
 				beforeSend : function ( xhr ) {
-					wpAjax.vars.button.text('Loading...');
+					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ... ';
 				},
 				success : function( data ){
 					if( data ) {
 						// console.log('loadmore Data: ',data);
-						wpAjax.vars.foundPosts = data.info.found_posts;
+						wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
 
 						var outputElement = wpAjax.buildLoopItem(data.loop);
-						$(wpAjax.vars.container.selector).append(outputElement); // insert new posts
-						$(wpAjax.vars.button.selector).text( 'load more' );
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', outputElement );
+						// $(wpAjax.vars.container.selector).append(outputElement); // insert new posts
 
-						wpAjax.vars.page++;
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
+
+						wpAjax.vars.loops[i].vars.page++;
 						// console.log('wpAjax.vars',wpAjax.vars,'data.info.found_posts',data.info.found_posts);
 					} else {
 
-						wpAjax.vars.button.hide(); // if no data, remove the button as well
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
 
 					}
 				}
 			});
+
 		},
 		/*
 		* Check for query-params & add to tax-query
 		* For example purposes only (at the moment)
 		**/
 		applyTerms : function(){
+
+			/*
 
 			wpAjax.vars.args["tax_query"] = [];
 			var taxQueryHolder = [];
@@ -191,10 +206,12 @@
 
 			var taxTerms = false;
 
-			/*
-			* WIP Taxo & Meta-Query integrations:
-			* Could populated/triggered by url-param, dom-attribute or other
-			*/
+			// WIP Taxo & Meta-Query integrations:
+			// Could populated/triggered by url-param, dom-attribute or other
+			// Global state defined by url-params,
+			// Followed by state applied via dom-attributes on output element
+			// Finally by those query/filters applied via output element specific controls.
+			// Consider duplicate & conflicting query rules
 
 			// turn query params into js object
 			var params = window.location.search.replace('?','');
@@ -316,6 +333,9 @@
 
 			console.log('wpAjax.vars.args',wpAjax.vars.args);
 			wpAjax.vars.query = JSON.stringify(wpAjax.vars.args);
+
+
+			*/
 
 		},
 		/*
