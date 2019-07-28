@@ -276,6 +276,33 @@
 
 							break;
 
+							case 'category' :
+
+								addTaxQuery = true;
+
+								if(wpAjax.vars.loops[i].vars.query_params[index].indexOf('+')!==-1){
+
+									taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split('+');
+									taxQueryHolder.push({
+										"taxonomy": index,
+										"field": "slug",
+										"terms": taxTerms,
+										"operator": "AND"
+									});
+
+								}else{
+
+									taxTerms = wpAjax.vars.loops[i].vars.query_params[index];
+									taxQueryHolder.push({
+										"taxonomy": index,
+										"field": "slug",
+										"terms": taxTerms
+									});
+
+								}
+
+							break;
+
 							// case 'sort_order':
 							//
 							// 	sortOrder = wpAjax.vars.loops[i].vars.query_params[index].split('+');
