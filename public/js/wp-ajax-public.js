@@ -113,7 +113,7 @@
 				dataType: 'json',
 				beforeSend : function ( xhr ) {
 
-					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ... ' + i;
+					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ...';
 
 				},
 				success : function( data ){
@@ -123,12 +123,11 @@
 
 						if( data.info.found_posts > 0 ) {
 
-							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
-
-							var outputElement = wpAjax.buildLoopItem(data.loop);
+							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;;
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].innerHTML = '';
-							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', outputElement );
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', wpAjax.buildLoopItem( data.loop ) );
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
 
@@ -136,7 +135,7 @@
 
 						} else {
 
-							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'Sorry, no posts matched your criteria';
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
 
@@ -180,9 +179,7 @@
 
 						wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
 
-						var outputElement = wpAjax.buildLoopItem(data.loop);
-
-						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', outputElement );
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', wpAjax.buildLoopItem( data.loop ) );
 
 						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
 
