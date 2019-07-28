@@ -135,14 +135,16 @@
 
 						} else {
 
-							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'Sorry, no posts matched your criteria';
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
 
-							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+							// wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = 'none';
 
 						}
 
 					} else {
-						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+
+						// wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = 'none';
+
 					}
 				}
 			} );
@@ -412,9 +414,6 @@
 		// Load-More Button Clicked
 		$('.wp-ajax-load').on("click",function(e){
 
-			// var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
-			// wpAjax.applyTerms( i );
-
 			wpAjax.loadMore(e);
 
 		});
@@ -441,8 +440,6 @@
 					wpAjax.init_ajax( i );
 				}
 			}
-			// wpAjax.applyTerms( i );
-
 
 
 		});
