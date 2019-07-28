@@ -243,7 +243,7 @@
 
 						switch (index) {
 
-							case 'wpajax_post_type' :
+							case 'ajax_post_type' :
 
 								wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index];
 
