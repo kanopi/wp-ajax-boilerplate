@@ -182,10 +182,14 @@ class Wp_Ajax_Public {
 	/**
 	 * Wp Ajax Shortcode
 	 */
-	function ajax_shortcode( $props ) {
+	function ajax_shortcode( $props, $content = null ) {
 
 		$props = shortcode_atts( [ 'post_type' => false, 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax' );
 		$attrs = [ 'class' => 'wp-ajax-wrap' ];
+
+		if ( ! empty( $props['post_type'] ) ) :
+			$attrs[ 'post_type' ] = $props['post_type'];
+		endif;
 
 		if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
 			$attrs[ $props['taxo'] ] = $props['term'];
@@ -202,10 +206,12 @@ class Wp_Ajax_Public {
 		else :
 			echo '<div>';
 		endif;
+
+		if ( ! empty( $content ) ) :
+			echo do_shortcode( $content );
+		endif;
 		?>
-			<article class="wp-ajax-feed">
-				<p>load posts here</p>
-			</article>
+			<article class="wp-ajax-feed">JavaScript must be enabled to load content</article>
 			<button class="wp-ajax-load">load more</button>
 
 		<?php
@@ -219,6 +225,17 @@ class Wp_Ajax_Public {
 	 */
 	public function add_ajax_shortcode() {
 		add_shortcode('ajax',[$this,'ajax_shortcode']);
+	}
+
+	// one shortcode or many: 3 layouts: button / select-dropdown... 2 types: post-type, tax-query + meta-query too, but after infrastructure flushed out
+	function ajax_filter_shortcode( $props ) {
+		// $props = shortcode_atts( [ 'filter_ui' => false, 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax_filter' );
+		ob_start();
+			echo '<div class="wp-ajax-filters"><button class="wp-ajax-filter--option" data-queryvar="post_type" data-value="post">Post</button><button class="wp-ajax-filter--option" data-queryvar="post_type" data-value="page">Page</button></div>';
+		return ob_get_clean();
+	}
+	public function add_ajax_filter_shortcode() {
+		add_shortcode('ajax_filter',[$this,'ajax_filter_shortcode']);
 	}
 
 	/**
