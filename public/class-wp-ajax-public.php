@@ -184,7 +184,7 @@ class Wp_Ajax_Public {
 	 */
 	function ajax_shortcode( $props ) {
 
-		$props = shortcode_atts( [ 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax' );
+		$props = shortcode_atts( [ 'post_type' => false, 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax' );
 		$attrs = [ 'class' => 'wp-ajax-wrap' ];
 
 		if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
