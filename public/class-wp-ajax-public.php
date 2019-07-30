@@ -213,7 +213,6 @@ class Wp_Ajax_Public {
 		?>
 			<article class="wp-ajax-feed">JavaScript must be enabled to load content</article>
 			<button class="wp-ajax-load">load more</button>
-
 		<?php
 		echo '</div>';
 		return ob_get_clean();
@@ -229,9 +228,72 @@ class Wp_Ajax_Public {
 
 	// one shortcode or many: 3 layouts: button / select-dropdown... 2 types: post-type, tax-query + meta-query too, but after infrastructure flushed out
 	function ajax_filter_shortcode( $props ) {
-		// $props = shortcode_atts( [ 'filter_ui' => false, 'taxo' => false, 'term' => false, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax_filter' );
+		$props = shortcode_atts( [ 'ux' => 'select', 'post_type' => null, 'taxo' => null, 'taxo_term' => null, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax_filter' );
+
+		// allowed post-types & terms applied here
+		$post_types = explode( ',', $props['post_type'] ) );
+		// todo: only allow specific post-types. check against user-intput &/or other specs
+		if ( ! empty( $post_types ) {
+			$post_types_list = [];
+			foreach ( $post_types as $post_type ) {
+				$post_types_list[] = $post_type;
+			}
+		}
+
+		$taxo_terms = explode( ',', $props['taxo_term'] ) );
+		if ( ! empty( $taxo_terms ) {
+			$taxo_terms_list = [];
+			foreach ( $taxo_terms as $taxo_term ) {
+				$taxo_terms_list[] = $taxo_term;
+			}
+		}
+
+		$output = '';
 		ob_start();
-			echo '<div class="wp-ajax-filters"><button class="wp-ajax-filter--option" data-queryvar="post_type" data-value="post">Post</button><button class="wp-ajax-filter--option" data-queryvar="post_type" data-value="page">Page</button></div>';
+
+			if ( 'select' === 'ux' ) {
+
+				if ( ! empty( $post_types_list ) ) {
+					$output .= '<option class="wp-ajax-filter">';
+					foreach (  $post_types_list as $post_type ) {
+						$output .= '<select class="wp-ajax-filter--option" data-queryvar="post_type" data-value="' .$post_type. '">' .$post_type. '</select>';
+					}
+					$output .= '</option>';
+				}
+				elseif ( ! empty( $props['taxo'] ) && ! empty( $taxo_terms_list ) ) {
+					$output .= '<option class="wp-ajax-filter">';
+					foreach (  $taxo_terms_list as $taxo_term ) {
+						$output .= '<select class="wp-ajax-filter--option" data-taxo="' . esc_attr( $props['taxo'] ) . '" data-value="' .$taxo_term. '">' .$taxo_term. '</select>';
+					}
+					$output .= '</option>';
+				}
+
+			elseif ( 'buttons' === 'ux' ) {
+
+				if ( ! empty( $post_types_list ) ) {
+					$output .= '<div class="wp-ajax-filter">';
+					foreach (  $post_types_list as $post_type ) {
+						$output .= '<button class="wp-ajax-filter--option" data-queryvar="post_type" data-value="' .$post_type. '">' .$post_type. '</button>';
+					}
+					$output .= '</div>';
+				}
+				elseif ( ! empty( $props['taxo'] ) && ! empty( $taxo_terms_list ) ) {
+					$output .= '<option class="wp-ajax-filter">';
+					foreach (  $taxo_terms_list as $taxo_term ) {
+						$output .= '<button class="wp-ajax-filter--option" data-taxo="' . esc_attr( $props['taxo'] ) . '" data-value="' .$taxo_term. '">' .$taxo_term. '</button>';
+					}
+					$output .= '</option>';
+				}
+
+			}
+			//  ( 'pills' === 'ux' ) { }
+			// elseif ( 'tag-list' === 'ux' ) { }
+			// elseif ( 'checkbox' === 'ux' ) { }
+
+			if ( ! empty( $output ) ) {
+				echo echo '<div class="wp-ajax-filter">'.$output.'</div>';
+			}
+
 		return ob_get_clean();
 	}
 	public function add_ajax_filter_shortcode() {
