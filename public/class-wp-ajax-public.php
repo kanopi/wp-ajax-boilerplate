@@ -231,17 +231,17 @@ class Wp_Ajax_Public {
 		$props = shortcode_atts( [ 'ux' => 'select', 'post_type' => null, 'taxo' => null, 'taxo_term' => null, 'meta' => false, 'key' => false, 'val' => false, ], $props, 'ajax_filter' );
 
 		// allowed post-types & terms applied here
-		$post_types = explode( ',', $props['post_type'] ) );
+		$post_types = explode( ',', $props['post_type'] );
 		// todo: only allow specific post-types. check against user-intput &/or other specs
-		if ( ! empty( $post_types ) {
+		if ( ! empty( $post_types ) ) {
 			$post_types_list = [];
 			foreach ( $post_types as $post_type ) {
 				$post_types_list[] = $post_type;
 			}
 		}
 
-		$taxo_terms = explode( ',', $props['taxo_term'] ) );
-		if ( ! empty( $taxo_terms ) {
+		$taxo_terms = explode( ',', $props['taxo_term'] );
+		if ( ! empty( $taxo_terms ) ) {
 			$taxo_terms_list = [];
 			foreach ( $taxo_terms as $taxo_term ) {
 				$taxo_terms_list[] = $taxo_term;
@@ -268,7 +268,7 @@ class Wp_Ajax_Public {
 					$output .= '</option>';
 				}
 
-			elseif ( 'buttons' === 'ux' ) {
+			} elseif ( 'buttons' === 'ux' ) {
 
 				if ( ! empty( $post_types_list ) ) {
 					$output .= '<div class="wp-ajax-filter">';
@@ -291,11 +291,12 @@ class Wp_Ajax_Public {
 			// elseif ( 'checkbox' === 'ux' ) { }
 
 			if ( ! empty( $output ) ) {
-				echo echo '<div class="wp-ajax-filter">'.$output.'</div>';
+				echo '<div class="wp-ajax-filter">'.$output.'</div>';
 			}
 
 		return ob_get_clean();
 	}
+
 	public function add_ajax_filter_shortcode() {
 		add_shortcode('ajax_filter',[$this,'ajax_filter_shortcode']);
 	}
