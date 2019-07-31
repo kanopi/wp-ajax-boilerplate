@@ -525,7 +525,7 @@
 			return true;
 		}
 
-	},
+	}
 
 
 	$(document).ready(function(){
