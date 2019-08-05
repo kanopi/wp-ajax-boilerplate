@@ -342,7 +342,7 @@
 				}
 			}
 
-
+			/*
 			if(addMetaQuery){
 
 				if( ! wpAjax.isEmpty(metaQueryHolder_FilterByPerson ) ){
@@ -369,7 +369,7 @@
 					delete wpAjax.vars.loops[i].vars.args["meta_query"];
 				}
 			}
-
+			*/
 
 			// instance specific default overrides
 			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
@@ -517,6 +517,106 @@
 			window.location = urlObj.dest + searchString;
 		},
 
+
+		/*
+		* Build URL Object
+		**/
+		buildUrlObject : function(){
+		    dest = window.location.origin,
+		    params = window.location.search.replace( '?', '' ),
+		    sub_params_out = {};
+
+		    dest += window.location.pathname;
+
+		    if ( params.length ) {
+		        var sub_params = params.split( '&' );
+		    }
+
+		    if ( sub_params ) {
+		        for ( var i in sub_params ) {
+		            var item = sub_params[ i ].split( '=' );
+		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
+		        }
+		    }
+
+		    return { 'dest': dest, 'sub_params_out': sub_params_out };
+		},
+
+		/*
+		* Add URL Param
+		**/
+		addUrlParam : function( e ) {
+			var
+				taxo = e.currentTarget.getAttribute( 'data-taxo' ),
+				term = e.currentTarget.getAttribute( 'data-term' ),
+				urlObj = buildUrlObject(),
+				searchSegments = [],
+				searchString = '?';
+
+			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
+				if ( urlObj.sub_params_out[ taxo ].indexOf( term ) === - 1 ) {
+					urlObj.sub_params_out[ taxo ].push( term );
+					// urlObj = buildUrlObject();
+				} else {
+					removeUrlParam( e );
+					return false;
+				}
+			} else {
+				urlObj.sub_params_out[ taxo ] = [ term ];
+			}
+
+			for ( var item in urlObj.sub_params_out ) {
+				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
+				searchSegments.push( segment );
+			}
+
+			searchString += searchSegments.join( '&' );
+
+			window.location = urlObj.dest + searchString;
+
+		},
+
+		/*
+		* Remove URL Param
+		**/
+		removeUrlParam : function( e ) {
+			e.preventDefault();
+
+			var
+			taxo = e.currentTarget.getAttribute( 'data-taxo' ),
+			term = e.currentTarget.getAttribute( 'data-term' ),
+				urlObj = buildUrlObject(),
+				searchSegments = [],
+				searchString = '?';
+
+			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
+
+				if ( urlObj.sub_params_out[ taxo ].length > 1 ) {
+					for ( var i = urlObj.sub_params_out[ taxo ].length; i --; ) {
+						if ( urlObj.sub_params_out[ taxo ][ i ] === term ) {
+							urlObj.sub_params_out[ taxo ].splice( i, 1 );
+						}
+						if ( ! urlObj.sub_params_out[ taxo ].length ) {
+							delete urlObj.sub_params_out[ taxo ];
+						}
+					}
+				} else if ( urlObj.sub_params_out[ taxo ].length === 1 ) {
+					delete urlObj.sub_params_out[ taxo ];
+				}
+
+			} else {
+				return false;
+			}
+
+			for ( var item in urlObj.sub_params_out ) {
+				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
+				searchSegments.push( segment );
+			}
+			searchString += searchSegments.join( '&' );
+
+			window.location = urlObj.dest + searchString;
+		},
+
 		isEmpty : function(obj) {
 			for(var key in obj) {
 				if(obj.hasOwnProperty(key))
@@ -545,26 +645,37 @@
 
 		$('.wp-ajax-filter--option').on("click",function(e){
 
-			var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
-			var query_var = e.target.getAttribute( 'data-queryvar' );
-			var value = e.target.getAttribute( 'data-value' );
+			var parentLoop = e.target.closest('.wp-ajax-wrap');
+			if ( parentLoop ) {
 
-			if ( query_var === 'post_type' ) {
-				if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
-					wpAjax.vars.loops[i].vars.args['post_type'] = value;
-					wpAjax.vars.loops[i].vars.page = 1;
+				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
+				var query_var = e.target.getAttribute( 'data-queryvar' );
+				var value = e.target.getAttribute( 'data-value' );
 
-					wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+				if ( query_var === 'post_type' ) {
+					if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
 
-					wpAjax.vars.loops[i].vars.data = {
-						'action': wpAjax.vars.dataAction,
-						'query': wpAjax.vars.loops[i].vars.query,
-						'page' : wpAjax.vars.loops[i].vars.page,
-					};
+						// Change query-rules store in instance-local data & rebuild instance-loop
+						wpAjax.vars.loops[i].vars.args['post_type'] = value;
+						wpAjax.vars.loops[i].vars.page = 1;
 
-					wpAjax.init_ajax( i );
+						wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+
+						wpAjax.vars.loops[i].vars.data = {
+							'action': wpAjax.vars.dataAction,
+							'query': wpAjax.vars.loops[i].vars.query,
+							'page' : wpAjax.vars.loops[i].vars.page,
+						};
+
+						wpAjax.init_ajax( i );
+					}
 				}
+
+			} else {
+				wpAjax.addUrlParam( e );
+				alert('i');
 			}
+
 
 
 		});
