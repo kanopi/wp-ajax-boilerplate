@@ -446,28 +446,29 @@
 		* Add URL Param
 		**/
 		addUrlParam : function( e ) {
-			var
-				taxo = e.currentTarget.getAttribute( 'data-taxo' ),
-				term = e.currentTarget.getAttribute( 'data-term' ),
-				urlObj = buildUrlObject(),
-				searchSegments = [],
-				searchString = '?';
+			e.preventDefault();
 
-			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
-				if ( urlObj.sub_params_out[ taxo ].indexOf( term ) === - 1 ) {
-					urlObj.sub_params_out[ taxo ].push( term );
+			var
+			queryvar = e.currentTarget.getAttribute( 'data-queryvar' ),
+			queryval = e.currentTarget.getAttribute( 'data-queryval' ),
+			urlObj = wpAjax.buildUrlObject(),
+			searchSegments = [],
+			searchString = '?';
+
+			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
+				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
+					urlObj.sub_params_out[ queryvar ].push( queryval );
 					// urlObj = buildUrlObject();
 				} else {
 					removeUrlParam( e );
 					return false;
 				}
 			} else {
-				urlObj.sub_params_out[ taxo ] = [ term ];
+				urlObj.sub_params_out[ queryvar ] = [ queryval ];
 			}
 
 			for ( var item in urlObj.sub_params_out ) {
-				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
-				searchSegments.push( segment );
+				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
 			}
 
 			searchString += searchSegments.join( '&' );
@@ -483,25 +484,25 @@
 			e.preventDefault();
 
 			var
-			taxo = e.currentTarget.getAttribute( 'data-taxo' ),
-			term = e.currentTarget.getAttribute( 'data-term' ),
-				urlObj = buildUrlObject(),
-				searchSegments = [],
-				searchString = '?';
+			queryvar = e.currentTarget.getAttribute( 'data-queryvar' ),
+			queryval = e.currentTarget.getAttribute( 'data-queryval' ),
+			urlObj = wpAjax.buildUrlObject(),
+			searchSegments = [],
+			searchString = '?';
 
-			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
+			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 
-				if ( urlObj.sub_params_out[ taxo ].length > 1 ) {
-					for ( var i = urlObj.sub_params_out[ taxo ].length; i --; ) {
-						if ( urlObj.sub_params_out[ taxo ][ i ] === term ) {
-							urlObj.sub_params_out[ taxo ].splice( i, 1 );
+				if ( urlObj.sub_params_out[ queryvar ].length > 1 ) {
+					for ( var i = urlObj.sub_params_out[ queryvar ].length; i --; ) {
+						if ( urlObj.sub_params_out[ queryvar ][ i ] === queryval ) {
+							urlObj.sub_params_out[ queryvar ].splice( i, 1 );
 						}
-						if ( ! urlObj.sub_params_out[ taxo ].length ) {
-							delete urlObj.sub_params_out[ taxo ];
+						if ( ! urlObj.sub_params_out[ queryvar ].length ) {
+							delete urlObj.sub_params_out[ queryvar ];
 						}
 					}
-				} else if ( urlObj.sub_params_out[ taxo ].length === 1 ) {
-					delete urlObj.sub_params_out[ taxo ];
+				} else if ( urlObj.sub_params_out[ queryvar ].length === 1 ) {
+					delete urlObj.sub_params_out[ queryvar ];
 				}
 
 			} else {
@@ -509,8 +510,7 @@
 			}
 
 			for ( var item in urlObj.sub_params_out ) {
-				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
-				searchSegments.push( segment );
+				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
 			}
 			searchString += searchSegments.join( '&' );
 
@@ -522,10 +522,10 @@
 		* Build URL Object
 		**/
 		buildUrlObject : function(){
-		    dest = window.location.origin,
-		    params = window.location.search.replace( '?', '' ),
+		    var
+			dest = window.location.origin,
+		    params = decodeURIComponent( window.location.search.replace( '?', '' ) ),
 		    sub_params_out = {};
-
 		    dest += window.location.pathname;
 
 		    if ( params.length ) {
@@ -540,81 +540,6 @@
 		    }
 
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
-		},
-
-		/*
-		* Add URL Param
-		**/
-		addUrlParam : function( e ) {
-			var
-				taxo = e.currentTarget.getAttribute( 'data-taxo' ),
-				term = e.currentTarget.getAttribute( 'data-term' ),
-				urlObj = buildUrlObject(),
-				searchSegments = [],
-				searchString = '?';
-
-			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
-				if ( urlObj.sub_params_out[ taxo ].indexOf( term ) === - 1 ) {
-					urlObj.sub_params_out[ taxo ].push( term );
-					// urlObj = buildUrlObject();
-				} else {
-					removeUrlParam( e );
-					return false;
-				}
-			} else {
-				urlObj.sub_params_out[ taxo ] = [ term ];
-			}
-
-			for ( var item in urlObj.sub_params_out ) {
-				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
-				searchSegments.push( segment );
-			}
-
-			searchString += searchSegments.join( '&' );
-
-			window.location = urlObj.dest + searchString;
-
-		},
-
-		/*
-		* Remove URL Param
-		**/
-		removeUrlParam : function( e ) {
-			e.preventDefault();
-
-			var
-			taxo = e.currentTarget.getAttribute( 'data-taxo' ),
-			term = e.currentTarget.getAttribute( 'data-term' ),
-				urlObj = buildUrlObject(),
-				searchSegments = [],
-				searchString = '?';
-
-			if ( urlObj.sub_params_out.hasOwnProperty( taxo ) ) {
-
-				if ( urlObj.sub_params_out[ taxo ].length > 1 ) {
-					for ( var i = urlObj.sub_params_out[ taxo ].length; i --; ) {
-						if ( urlObj.sub_params_out[ taxo ][ i ] === term ) {
-							urlObj.sub_params_out[ taxo ].splice( i, 1 );
-						}
-						if ( ! urlObj.sub_params_out[ taxo ].length ) {
-							delete urlObj.sub_params_out[ taxo ];
-						}
-					}
-				} else if ( urlObj.sub_params_out[ taxo ].length === 1 ) {
-					delete urlObj.sub_params_out[ taxo ];
-				}
-
-			} else {
-				return false;
-			}
-
-			for ( var item in urlObj.sub_params_out ) {
-				segment = item + '=' + urlObj.sub_params_out[ item ].join( ',' );
-				searchSegments.push( segment );
-			}
-			searchString += searchSegments.join( '&' );
-
-			window.location = urlObj.dest + searchString;
 		},
 
 		isEmpty : function(obj) {
@@ -643,7 +568,7 @@
 
 		});
 
-		$('.wp-ajax-filter--option').on("click",function(e){
+		$('.wp-ajax-filter--option-inactive').on("click",function(e){
 
 			var parentLoop = e.target.closest('.wp-ajax-wrap');
 			if ( parentLoop ) {
@@ -676,10 +601,43 @@
 				alert('i');
 			}
 
-
-
 		});
 
+
+		$('.wp-ajax-filter--option-active').on("click",function(e){
+
+			var parentLoop = e.target.closest('.wp-ajax-wrap');
+			if ( parentLoop ) {
+
+				// var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
+				// var query_var = e.target.getAttribute( 'data-queryvar' );
+				// var value = e.target.getAttribute( 'data-value' );
+				//
+				// if ( query_var === 'post_type' ) {
+				// 	if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
+				//
+				// 		// Change query-rules store in instance-local data & rebuild instance-loop
+				// 		wpAjax.vars.loops[i].vars.args['post_type'] = value;
+				// 		wpAjax.vars.loops[i].vars.page = 1;
+				//
+				// 		wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+				//
+				// 		wpAjax.vars.loops[i].vars.data = {
+				// 			'action': wpAjax.vars.dataAction,
+				// 			'query': wpAjax.vars.loops[i].vars.query,
+				// 			'page' : wpAjax.vars.loops[i].vars.page,
+				// 		};
+				//
+				// 		wpAjax.init_ajax( i );
+				// 	}
+				// }
+
+			} else {
+				wpAjax.removeUrlParam( e );
+				alert('i');
+			}
+
+		});
 
 	});
 
