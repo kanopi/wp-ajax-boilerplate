@@ -105,7 +105,7 @@
 
 		init_ajax : function( i ) {
 
-			console.log( 'init_ajax: wpAjax.vars.loops[i].vars.data', wpAjax.vars.loops[i].vars.data );
+			// console.log( 'init_ajax: wpAjax.vars.loops[i].vars.data', wpAjax.vars.loops[i].vars.data );
 			 // todo: build queue, rather than fire off a request for each
 			return $.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
@@ -119,7 +119,7 @@
 				},
 				success : function( data ){
 
-					console.log(i,data);
+					// console.log(i,data);
 					if( data ) {
 
 						if( data.info.found_posts > 0 ) {
@@ -204,7 +204,7 @@
 		**/
 		applyTerms : function( i ){
 
-			console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
+			// console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
 
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 			var taxQueryHolder = [];
@@ -249,13 +249,13 @@
 							case 'ajax_post_type' :
 
 								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
-
+									console.log('a')
 									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
 
 								} else {
-
-									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index];
-
+									console.log('b')
+									wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+									console.log(wpAjax.vars.loops[i].vars.args['post_type']);
 								}
 
 							break;
@@ -341,6 +341,39 @@
 				}
 			}
 
+
+
+			// instance specific default overrides
+			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
+			console.log('i',i,'local_post_type',local_post_type);
+			if ( local_post_type ) {
+				// wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.args.postType;
+				// wpAjax.vars.loops[i].vars.args['post_type'] = local_post_type;
+
+				if ( -1 !== local_post_type.indexOf( ',' ) ) {
+					// console.log('a')
+					local_post_type = local_post_type.split(',');
+					for ( var pt in local_post_type ) {
+						console.log('pt',pt)
+						if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( pt ) ) {
+							wpAjax.vars.loops[i].vars.args['post_type'].push( pt )
+						}
+					}
+
+				} else {
+					// console.log('b')
+					// wpAjax.vars.loops[i].vars.args['post_type'] = [ local_post_type ];
+					// console.log( wpAjax.vars.loops[i].vars.args['post_type'] );
+					if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( local_post_type ) ) {
+						wpAjax.vars.loops[i].vars.args['post_type'].push( local_post_type )
+					}
+
+				}
+			}
+
+
+
+
 			if(addTaxQuery){
 
 				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
@@ -383,18 +416,11 @@
 			}
 			*/
 
-			// instance specific default overrides
-			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
-			// console.log('i',i,'local_post_type',local_post_type);
-			if ( local_post_type ) {
-				// wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.args.postType;
-				wpAjax.vars.loops[i].vars.args['post_type'] = local_post_type;
-			}
 
 			// instance specific session overrides
 
 
-			console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
+			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
 			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
 
 
@@ -559,52 +585,77 @@
 			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e',e);
 			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e.target',e.target);
 
-
 			var parentLoop = e.target.closest('.wp-ajax-wrap');
 			if ( parentLoop ) {
 
 				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
-				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' );
+				// Local wrapper default settings
+				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
+				taxo = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
+				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
 
+				// button specifics
+				var queryvar = e.target.getAttribute( 'data-query_var' ),
+				queryval = e.target.getAttribute( 'data-query_val' );
 
+				console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
-				// console.log( "if ( parentLoop ) { wpAjax.vars.loops[i].vars.args",  wpAjax.vars.loops[i].vars.args );
-				var queryvar = e.target.getAttribute( 'data-query_var' );
-				var queryval = e.target.getAttribute( 'data-query_val' );
 				if ( queryvar === 'ajax_post_type' ) {
 
+					var currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || [];
 
-					var currentRules = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ) || wpAjax.vars.loops[i].vars.args['post_type'] || 'post';
-					if ( ! currentRules ) {
-						currentRules = [ 'post' ];
-					} else {
-						currentRules = [ currentRules ];
+					if ( -1 === currentRules.indexOf( post_type ) ) {
+						currentRules.push( post_type );
 					}
 
-					console.log('currentRules',currentRules,'queryvar',queryvar,'queryval',queryval);
-
-					if ( currentRules.indexOf( queryval ) === - 1 ) {
+					if ( -1 === currentRules.indexOf( queryval ) && post_type !== queryval ) {
 
 						currentRules.push( queryval );
 
 					} else {
-
-						if ( currentRules.length > 1 ) {
+						if ( currentRules.length ) {
 							for ( var j = currentRules.length; j --; ) {
 								if ( currentRules[ j ] === queryval ) {
+									console.log(1)
 									currentRules.splice( j, 1 );
 								}
-								// if ( ! currentRules.length ) {
-								// 	currentRules = 'post';
-								// }
 							}
 						}
-						//  else if ( currentRules.length === 1 ) {
-						// 	delete urlObj.sub_params_out[ queryvar ];
-						// }
 					}
 
-					wpAjax.vars.loops[i].vars.args['post_type'] = currentRules;
+					console.log( '4',currentRules )
+
+					if ( currentRules.length ) {
+						wpAjax.vars.loops[i].vars.args['post_type'] = currentRules;
+					} else {
+
+						if( wpAjax.vars.params.length ){
+							if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params)){
+								for (var index in wpAjax.vars.loops[i].vars.query_params) {
+
+									switch (index) {
+
+										case 'ajax_post_type' :
+
+											if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
+												console.log('a')
+												wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
+
+											} else {
+												console.log('b')
+												wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+												console.log(wpAjax.vars.loops[i].vars.args['post_type']);
+											}
+										break;
+									}
+								}
+							}
+						}
+
+					}
+
+					console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+					console.log( 'currentRules', currentRules )
 					// if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
 					//
 					// 	// Change query-rules store in instance-local data & rebuild instance-loop
@@ -636,7 +687,7 @@
 
 				wpAjax.init_ajax( i );
 
-				alert('inner');
+				console.log('inner');
 
 			} else {
 
