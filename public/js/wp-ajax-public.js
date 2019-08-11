@@ -555,22 +555,26 @@
 		},
 
 		click_filterOptions : function(e){
-			// 
+			//
 			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e',e);
 			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e.target',e.target);
-			var queryvar = e.target.getAttribute( 'data-query_var' );
-			var queryval = e.target.getAttribute( 'data-query_val' );
+
 
 			var parentLoop = e.target.closest('.wp-ajax-wrap');
 			if ( parentLoop ) {
 
-				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
+				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
+				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' );
+
+
 
 				// console.log( "if ( parentLoop ) { wpAjax.vars.loops[i].vars.args",  wpAjax.vars.loops[i].vars.args );
-
+				var queryvar = e.target.getAttribute( 'data-query_var' );
+				var queryval = e.target.getAttribute( 'data-query_val' );
 				if ( queryvar === 'ajax_post_type' ) {
 
-					var currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || 'post';
+
+					var currentRules = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ) || wpAjax.vars.loops[i].vars.args['post_type'] || 'post';
 					if ( ! currentRules ) {
 						currentRules = [ 'post' ];
 					} else {
