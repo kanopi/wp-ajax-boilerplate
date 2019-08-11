@@ -11,7 +11,8 @@
 			loops : {},
 			params : window.location.search.replace( '?', '' ),
 			containerWraps : document.getElementsByClassName( 'wp-ajax-wrap' ),
-			filterWraps : document.getElementsByClassName( 'wp-ajax-filter--wrap' ),
+			// filterWraps : document.getElementsByClassName( 'wp-ajax-filter--wrap' ),
+			// filterOptions : document.getElementsByClassName( 'wp-ajax-filter--option' ),
 			container : 'wp-ajax-feed',
 			button : 'wp-ajax-load',
 		},
@@ -42,12 +43,10 @@
 							limit : 2,
 							loadMoreLimit : 2,
 							isFirstClick : true,
-							// postType:"post",
 							taxo : "none",
 							terms : "all",
 							args : {
 								posts_per_page : 2,
-								// post_type : "post",
 							},
 							query : "",
 							data : {},
@@ -632,6 +631,8 @@
 
 				} else {
 
+					// todo: migrate post_type functionality to use taxonomy/terms 
+
 					if( value !== wpAjax.vars.loops[i].vars.args[ query_var ] ) {
 
 						// Change query-rules store in instance-local data & rebuild instance-loop
@@ -697,13 +698,11 @@
 	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
 	    }
 
-		var filterWraps = document.getElementsByClassName('wp-ajax-filter--wrap');
-	    for ( var i = 0; i < filterOptions.length; i++ ) {
-	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
-	    }
-		// filterWraps
-		// 			var parentLoop = e.target.closest('.wp-ajax-wrap');
-					// if ( parentLoop ) {
+		// var filterWraps = document.getElementsByClassName('wp-ajax-filter--wrap');
+	    // for ( var i = 0; i < filterOptions.length; i++ ) {
+	    //   filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
+	    // }
+
 	});
 
 
