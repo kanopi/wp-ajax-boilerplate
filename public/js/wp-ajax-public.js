@@ -249,11 +249,11 @@
 							case 'ajax_post_type' :
 
 								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
-									console.log('a')
+									// console.log('a')
 									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
 
 								} else {
-									console.log('b')
+									// console.log('b')
 									wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
 									console.log(wpAjax.vars.loops[i].vars.args['post_type']);
 								}
@@ -604,7 +604,7 @@
 
 					var currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || [];
 
-					if ( -1 === currentRules.indexOf( post_type ) ) {
+					if ( post_type && -1 === currentRules.indexOf( post_type ) ) {
 						currentRules.push( post_type );
 					}
 
@@ -626,7 +626,9 @@
 					console.log( '4',currentRules )
 
 					if ( currentRules.length ) {
+						console.log(5)
 						wpAjax.vars.loops[i].vars.args['post_type'] = currentRules;
+
 					} else {
 
 						if( wpAjax.vars.params.length ){
@@ -687,7 +689,7 @@
 
 				wpAjax.init_ajax( i );
 
-				console.log('inner');
+				console.log('inner',wpAjax.vars.loops[i].vars.data);
 
 			} else {
 
