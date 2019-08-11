@@ -27,7 +27,7 @@
 				if ( sub_params ) {
 					for( var i in sub_params ){
 						var item = sub_params[i].split('=');
-						sub_params_out[ item[0] ] = item[1];
+						sub_params_out[ item[0] ] = decodeURIComponent( item[1] );
 					}
 				}
 
@@ -46,7 +46,7 @@
 							terms : "all",
 							args : {
 								posts_per_page : 2,
-								post_type : "post",
+								// post_type : "post",
 							},
 							query : "",
 							data : {},
@@ -105,6 +105,7 @@
 
 		init_ajax : function( i ) {
 
+			console.log( 'init_ajax: wpAjax.vars.loops[i].vars.data', wpAjax.vars.loops[i].vars.data );
 			 // todo: build queue, rather than fire off a request for each
 			return $.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
@@ -203,12 +204,14 @@
 		**/
 		applyTerms : function( i ){
 
-			console.log('wpAjax.vars',wpAjax.vars);
+			console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
+
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 			var taxQueryHolder = [];
 			var taxQuery = {"relation": "AND"};
 			taxQueryHolder.push(taxQuery);
 
+			/*
 			wpAjax.vars.loops[i].vars.args["meta_query"] = [];
 			var metaQueryHolder = [];
 			metaQueryHolder["relation"] = "AND";
@@ -219,6 +222,7 @@
 			// metaQueryHolder_FilterByPerson["relation"] = "AND";
 			metaQueryHolder_OmitFromArchive["relation"] = "OR";
 			metaQueryHolder_pin_archive["relation"] = "OR";
+			*/
 
 			var addTaxQuery = false;
 			var addMetaQuery = false;
@@ -237,7 +241,6 @@
 			// var params = window.location.search.replace('?','');
 
 			if( wpAjax.vars.params.length ){
-
 				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params)){
 					for (var index in wpAjax.vars.loops[i].vars.query_params) {
 
@@ -245,7 +248,15 @@
 
 							case 'ajax_post_type' :
 
-								wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index];
+								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
+
+									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
+
+								} else {
+
+									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index];
+
+								}
 
 							break;
 
@@ -253,7 +264,7 @@
 
 								addTaxQuery = true;
 
-								if(wpAjax.vars.loops[i].vars.query_params[index].indexOf('+')!==-1){
+								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( '+' ) ){
 
 									taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split('+');
 									taxQueryHolder.push({
@@ -280,7 +291,7 @@
 
 								addTaxQuery = true;
 
-								if(wpAjax.vars.loops[i].vars.query_params[index].indexOf('+')!==-1){
+								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf('+') ){
 
 									taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split('+');
 									taxQueryHolder.push({
@@ -298,8 +309,10 @@
 										"field": "slug",
 										"terms": taxTerms
 									});
-
 								}
+
+							// default :
+							// requires is_term && || whitelist of taxo from get_terms cached as transients if not exist
 
 							break;
 
@@ -326,7 +339,6 @@
 
 					}
 				}
-
 			}
 
 			if(addTaxQuery){
@@ -449,8 +461,8 @@
 			e.preventDefault();
 
 			var
-			queryvar = e.currentTarget.getAttribute( 'data-queryvar' ),
-			queryval = e.currentTarget.getAttribute( 'data-queryval' ),
+			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
 			urlObj = wpAjax.buildUrlObject(),
 			searchSegments = [],
 			searchString = '?';
@@ -484,8 +496,8 @@
 			e.preventDefault();
 
 			var
-			queryvar = e.currentTarget.getAttribute( 'data-queryvar' ),
-			queryval = e.currentTarget.getAttribute( 'data-queryval' ),
+			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
 			urlObj = wpAjax.buildUrlObject(),
 			searchSegments = [],
 			searchString = '?';
@@ -542,6 +554,100 @@
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
 		},
 
+		click_filterOptions : function(e){
+			// 
+			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e',e);
+			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e.target',e.target);
+			var queryvar = e.target.getAttribute( 'data-query_var' );
+			var queryval = e.target.getAttribute( 'data-query_val' );
+
+			var parentLoop = e.target.closest('.wp-ajax-wrap');
+			if ( parentLoop ) {
+
+				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
+
+				// console.log( "if ( parentLoop ) { wpAjax.vars.loops[i].vars.args",  wpAjax.vars.loops[i].vars.args );
+
+				if ( queryvar === 'ajax_post_type' ) {
+
+					var currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || 'post';
+					if ( ! currentRules ) {
+						currentRules = [ 'post' ];
+					} else {
+						currentRules = [ currentRules ];
+					}
+
+					console.log('currentRules',currentRules,'queryvar',queryvar,'queryval',queryval);
+
+					if ( currentRules.indexOf( queryval ) === - 1 ) {
+
+						currentRules.push( queryval );
+
+					} else {
+
+						if ( currentRules.length > 1 ) {
+							for ( var j = currentRules.length; j --; ) {
+								if ( currentRules[ j ] === queryval ) {
+									currentRules.splice( j, 1 );
+								}
+								// if ( ! currentRules.length ) {
+								// 	currentRules = 'post';
+								// }
+							}
+						}
+						//  else if ( currentRules.length === 1 ) {
+						// 	delete urlObj.sub_params_out[ queryvar ];
+						// }
+					}
+
+					wpAjax.vars.loops[i].vars.args['post_type'] = currentRules;
+					// if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
+					//
+					// 	// Change query-rules store in instance-local data & rebuild instance-loop
+					// 	wpAjax.vars.loops[i].vars.args['post_type'] = value;
+					//
+					// }
+					// console.log('asdf');
+
+				} else {
+
+
+					if( value !== wpAjax.vars.loops[i].vars.args[ query_var ] ) {
+
+						// Change query-rules store in instance-local data & rebuild instance-loop
+						wpAjax.vars.loops[i].vars.args[ query_var ] = value;
+
+					}
+				}
+
+				wpAjax.vars.loops[i].vars.page = 1;
+
+				wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
+
+				wpAjax.vars.loops[i].vars.data = {
+					'action' : wpAjax.vars.dataAction,
+					'query': wpAjax.vars.loops[i].vars.query,
+					'page' : wpAjax.vars.loops[i].vars.page,
+				};
+
+				wpAjax.init_ajax( i );
+
+				alert('inner');
+
+			} else {
+
+				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
+					wpAjax.removeUrlParam( e );
+				} else {
+					wpAjax.addUrlParam( e );
+				}
+
+
+				// alert('outter');
+			}
+
+		},
+
 		isEmpty : function(obj) {
 			for(var key in obj) {
 				if(obj.hasOwnProperty(key))
@@ -568,76 +674,10 @@
 
 		});
 
-		$('.wp-ajax-filter--option-inactive').on("click",function(e){
-
-			var parentLoop = e.target.closest('.wp-ajax-wrap');
-			if ( parentLoop ) {
-
-				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
-				var query_var = e.target.getAttribute( 'data-queryvar' );
-				var value = e.target.getAttribute( 'data-value' );
-
-				if ( query_var === 'post_type' ) {
-					if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
-
-						// Change query-rules store in instance-local data & rebuild instance-loop
-						wpAjax.vars.loops[i].vars.args['post_type'] = value;
-						wpAjax.vars.loops[i].vars.page = 1;
-
-						wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
-
-						wpAjax.vars.loops[i].vars.data = {
-							'action': wpAjax.vars.dataAction,
-							'query': wpAjax.vars.loops[i].vars.query,
-							'page' : wpAjax.vars.loops[i].vars.page,
-						};
-
-						wpAjax.init_ajax( i );
-					}
-				}
-
-			} else {
-				wpAjax.addUrlParam( e );
-				alert('i');
-			}
-
-		});
-
-
-		$('.wp-ajax-filter--option-active').on("click",function(e){
-
-			var parentLoop = e.target.closest('.wp-ajax-wrap');
-			if ( parentLoop ) {
-
-				// var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
-				// var query_var = e.target.getAttribute( 'data-queryvar' );
-				// var value = e.target.getAttribute( 'data-value' );
-				//
-				// if ( query_var === 'post_type' ) {
-				// 	if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
-				//
-				// 		// Change query-rules store in instance-local data & rebuild instance-loop
-				// 		wpAjax.vars.loops[i].vars.args['post_type'] = value;
-				// 		wpAjax.vars.loops[i].vars.page = 1;
-				//
-				// 		wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
-				//
-				// 		wpAjax.vars.loops[i].vars.data = {
-				// 			'action': wpAjax.vars.dataAction,
-				// 			'query': wpAjax.vars.loops[i].vars.query,
-				// 			'page' : wpAjax.vars.loops[i].vars.page,
-				// 		};
-				//
-				// 		wpAjax.init_ajax( i );
-				// 	}
-				// }
-
-			} else {
-				wpAjax.removeUrlParam( e );
-				alert('i');
-			}
-
-		});
+		var filterOptions = document.getElementsByClassName('wp-ajax-filter--option');
+	    for ( var i = 0; i < filterOptions.length; i++ ) {
+	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
+	    }
 
 	});
 

@@ -270,7 +270,7 @@ class Wp_Ajax_Public {
 					} else {
 						$classes[] = 'wp-ajax-filter--option-inactive';
 					}
-					$output .= '<option class="' . esc_attr( implode( ' ', $classes ) ) . '" data-queryvar="' . esc_attr( $query_var ) . '" data-queryval="' .$query_arg. '">' .$query_arg. '</option>';
+					$output .= '<option class="' . esc_attr( implode( ' ', $classes ) ) . '" data-query_var="' . esc_attr( $query_var ) . '" data-query_val="' .$query_arg. '">' .$query_arg. '</option>';
 				}
 				$output .= '</select>';
 
@@ -284,7 +284,7 @@ class Wp_Ajax_Public {
 					} else {
 						$classes[] = 'wp-ajax-filter--option-inactive';
 					}
-					$output .= '<button class="' . esc_attr( implode( ' ', $classes ) ) . '" data-queryvar="' . esc_attr( $query_var ) . '" data-queryval="' .$query_arg. '">' .$query_arg. '</button>';
+					$output .= '<button class="' . esc_attr( implode( ' ', $classes ) ) . '" data-query_var="' . esc_attr( $query_var ) . '" data-query_val="' .$query_arg. '">' .$query_arg. '</button>';
 				}
 				$output .= '</div>';
 
