@@ -20,9 +20,12 @@ This plugin is an attempt at organizing and aggregating different techniques for
 
 == ToDos ==
 
+- Add Active/inactive states based on defaults on parent element
+- integrate all levels of tiered filters with taxonomy-queries
+
 - Add filters shortcode: select, radio, checkbox, to work in tandem with url-params for all filters
 - Build out filter-menus shortcodes & click-handlers
-- Apply filter menus to global state if not nested within an ajax shortcode & shortcode-instance if nested 
+- Apply filter menus to global state if not nested within an ajax shortcode & shortcode-instance if nested
 - Hide load-more buttons if found-posts < limit/per_page || limit*index >= found-posts
 - Handle add/remove taxonomy terms - re-apply default terms if needed - consider multiple loops per page
 - Consider allowed-terms list (& admin-options page) to allow tax-query fallback in final else of apply-terms function
