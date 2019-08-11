@@ -294,7 +294,7 @@ class Wp_Ajax_Public {
 			// elseif ( 'checkbox' === 'ux' ) { }
 
 			if ( ! empty( $output ) ) {
-				echo '<div class="wp-ajax-filter">'.$output.'</div>';
+				echo '<div class="wp-ajax-filter--wrap">'.$output.'</div>';
 			}
 
 		}

@@ -11,6 +11,7 @@
 			loops : {},
 			params : window.location.search.replace( '?', '' ),
 			containerWraps : document.getElementsByClassName( 'wp-ajax-wrap' ),
+			filterWraps : document.getElementsByClassName( 'wp-ajax-filter--wrap' ),
 			container : 'wp-ajax-feed',
 			button : 'wp-ajax-load',
 		},
@@ -106,7 +107,7 @@
 		init_ajax : function( i ) {
 
 			// console.log( 'init_ajax: wpAjax.vars.loops[i].vars.data', wpAjax.vars.loops[i].vars.data );
-			 // todo: build queue, rather than fire off a request for each
+			// todo: build queue, rather than fire off a request for each
 			return $.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
 				data : wpAjax.vars.loops[i].vars.data,
@@ -237,8 +238,82 @@
 			// Finally by those query/filters applied via output element specific controls.
 			// Consider duplicate & conflicting query rules
 
-			// turn query params into js object
-			// var params = window.location.search.replace('?','');
+			wpAjax.applyUrlParams( i );
+
+			// instance specific default overrides
+			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
+
+			if ( local_post_type ) {
+
+				if ( -1 !== local_post_type.indexOf( ',' ) ) {
+
+					local_post_type = local_post_type.split(',');
+					for ( var pt in local_post_type ) {
+						console.log('pt',pt)
+						if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( pt ) ) {
+							wpAjax.vars.loops[i].vars.args['post_type'].push( pt )
+						}
+					}
+
+				} else {
+
+					if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( local_post_type ) ) {
+						wpAjax.vars.loops[i].vars.args['post_type'].push( local_post_type )
+					}
+
+				}
+			}
+
+
+
+			if(addTaxQuery){
+
+				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
+				if(addSearchQuery){
+					wpAjax.vars.loops[i].vars.args["search_tax_query"] = true;
+				}
+
+			}else{
+				if(wpAjax.vars.loops[i].vars.args["tax_query"]){
+					delete wpAjax.vars.loops[i].vars.args["tax_query"];
+				}
+			}
+
+			/*
+			if(addMetaQuery){
+
+				if( ! wpAjax.isEmpty(metaQueryHolder_FilterByPerson ) ){
+					metaQueryHolder.push(metaQueryHolder_FilterByPerson)
+				}
+
+				if( ! wpAjax.isEmpty(metaQueryHolder_OmitFromArchive ) ){
+					metaQueryHolder.push(metaQueryHolder_OmitFromArchive)
+				}
+
+				if(wpAjax.vars.loops[i].vars.args["post_type"]==="person"){
+					if( ! wpAjax.isEmpty(metaQueryHolder_lastname ) ){
+						metaQueryHolder.push(metaQueryHolder_lastname)
+					}
+					if( ! wpAjax.isEmpty(metaQueryHolder_pin_archive ) ){
+						metaQueryHolder.push(metaQueryHolder_pin_archive)
+					}
+				}
+
+				wpAjax.vars.loops[i].vars.args["meta_query"] = metaQueryHolder;
+
+			}else{
+				if(wpAjax.vars.loops[i].vars.args["meta_query"]){
+					delete wpAjax.vars.loops[i].vars.args["meta_query"];
+				}
+			}
+			*/
+
+			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
+			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
+
+		},
+
+		applyUrlParams : function ( i ){
 
 			if( wpAjax.vars.params.length ){
 				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params)){
@@ -249,13 +324,13 @@
 							case 'ajax_post_type' :
 
 								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
-									// console.log('a')
+
 									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
 
 								} else {
-									// console.log('b')
+
 									wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
-									console.log(wpAjax.vars.loops[i].vars.args['post_type']);
+
 								}
 
 							break;
@@ -342,89 +417,8 @@
 			}
 
 
-
-			// instance specific default overrides
-			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
-			console.log('i',i,'local_post_type',local_post_type);
-			if ( local_post_type ) {
-				// wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.args.postType;
-				// wpAjax.vars.loops[i].vars.args['post_type'] = local_post_type;
-
-				if ( -1 !== local_post_type.indexOf( ',' ) ) {
-					// console.log('a')
-					local_post_type = local_post_type.split(',');
-					for ( var pt in local_post_type ) {
-						console.log('pt',pt)
-						if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( pt ) ) {
-							wpAjax.vars.loops[i].vars.args['post_type'].push( pt )
-						}
-					}
-
-				} else {
-					// console.log('b')
-					// wpAjax.vars.loops[i].vars.args['post_type'] = [ local_post_type ];
-					// console.log( wpAjax.vars.loops[i].vars.args['post_type'] );
-					if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( local_post_type ) ) {
-						wpAjax.vars.loops[i].vars.args['post_type'].push( local_post_type )
-					}
-
-				}
-			}
-
-
-
-
-			if(addTaxQuery){
-
-				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
-				if(addSearchQuery){
-					wpAjax.vars.loops[i].vars.args["search_tax_query"] = true;
-				}
-
-			}else{
-				if(wpAjax.vars.loops[i].vars.args["tax_query"]){
-					delete wpAjax.vars.loops[i].vars.args["tax_query"];
-				}
-			}
-
-			/*
-			if(addMetaQuery){
-
-				if( ! wpAjax.isEmpty(metaQueryHolder_FilterByPerson ) ){
-					metaQueryHolder.push(metaQueryHolder_FilterByPerson)
-				}
-
-				if( ! wpAjax.isEmpty(metaQueryHolder_OmitFromArchive ) ){
-					metaQueryHolder.push(metaQueryHolder_OmitFromArchive)
-				}
-
-				if(wpAjax.vars.loops[i].vars.args["post_type"]==="person"){
-					if( ! wpAjax.isEmpty(metaQueryHolder_lastname ) ){
-						metaQueryHolder.push(metaQueryHolder_lastname)
-					}
-					if( ! wpAjax.isEmpty(metaQueryHolder_pin_archive ) ){
-						metaQueryHolder.push(metaQueryHolder_pin_archive)
-					}
-				}
-
-				wpAjax.vars.loops[i].vars.args["meta_query"] = metaQueryHolder;
-
-			}else{
-				if(wpAjax.vars.loops[i].vars.args["meta_query"]){
-					delete wpAjax.vars.loops[i].vars.args["meta_query"];
-				}
-			}
-			*/
-
-
-			// instance specific session overrides
-
-
-			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
-			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
-
-
 		},
+
 		/*
 		* HTML Template for Each Row of Data
 		**/
@@ -580,10 +574,7 @@
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
 		},
 
-		click_filterOptions : function(e){
-			//
-			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e',e);
-			// console.log('$(.wp-ajax-filter--option).on("click",function(e){ e.target',e.target);
+		click_filterOptions : function( e ){
 
 			var parentLoop = e.target.closest('.wp-ajax-wrap');
 			if ( parentLoop ) {
@@ -592,13 +583,20 @@
 				// Local wrapper default settings
 				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
 				taxo = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
-				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
-
+				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' ),
 				// button specifics
-				var queryvar = e.target.getAttribute( 'data-query_var' ),
+				queryvar = e.target.getAttribute( 'data-query_var' ),
 				queryval = e.target.getAttribute( 'data-query_val' );
 
-				console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+				// console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+
+				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
+					e.target.classList.remove( 'wp-ajax-filter--option-active' );
+					e.target.classList.add( 'wp-ajax-filter--option-inactive' );
+				} else {
+					e.target.classList.remove( 'wp-ajax-filter--option-inactive' );
+					e.target.classList.add( 'wp-ajax-filter--option-active' );
+				}
 
 				if ( queryvar === 'ajax_post_type' ) {
 
@@ -616,58 +614,23 @@
 						if ( currentRules.length ) {
 							for ( var j = currentRules.length; j --; ) {
 								if ( currentRules[ j ] === queryval ) {
-									console.log(1)
 									currentRules.splice( j, 1 );
 								}
 							}
 						}
 					}
 
-					console.log( '4',currentRules )
-
 					if ( currentRules.length ) {
-						console.log(5)
+
 						wpAjax.vars.loops[i].vars.args['post_type'] = currentRules;
 
 					} else {
 
-						if( wpAjax.vars.params.length ){
-							if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params)){
-								for (var index in wpAjax.vars.loops[i].vars.query_params) {
-
-									switch (index) {
-
-										case 'ajax_post_type' :
-
-											if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
-												console.log('a')
-												wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split(',');
-
-											} else {
-												console.log('b')
-												wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
-												console.log(wpAjax.vars.loops[i].vars.args['post_type']);
-											}
-										break;
-									}
-								}
-							}
-						}
+						wpAjax.applyUrlParams( i );
 
 					}
 
-					console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
-					console.log( 'currentRules', currentRules )
-					// if( value !== wpAjax.vars.loops[i].vars.args['post_type'] ) {
-					//
-					// 	// Change query-rules store in instance-local data & rebuild instance-loop
-					// 	wpAjax.vars.loops[i].vars.args['post_type'] = value;
-					//
-					// }
-					// console.log('asdf');
-
 				} else {
-
 
 					if( value !== wpAjax.vars.loops[i].vars.args[ query_var ] ) {
 
@@ -699,8 +662,6 @@
 					wpAjax.addUrlParam( e );
 				}
 
-
-				// alert('outter');
 			}
 
 		},
@@ -736,6 +697,13 @@
 	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
 	    }
 
+		var filterWraps = document.getElementsByClassName('wp-ajax-filter--wrap');
+	    for ( var i = 0; i < filterOptions.length; i++ ) {
+	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
+	    }
+		// filterWraps
+		// 			var parentLoop = e.target.closest('.wp-ajax-wrap');
+					// if ( parentLoop ) {
 	});
 
 
