@@ -548,7 +548,6 @@
 			window.location = urlObj.dest + searchString;
 		},
 
-
 		/*
 		* Build URL Object
 		**/
@@ -631,14 +630,16 @@
 
 				} else {
 
-					// todo: migrate post_type functionality to use taxonomy/terms 
-
+					// todo: migrate post_type functionality to use taxonomy/terms
+					// Make use of wpAjax.vars.loops[ i ].var.taxo && wpAjax.vars.loops[ i ].var.terms to do this, consider just using wpAjax.vars.loops[ i ].var.taxo as multideimensional/obj
 					if( value !== wpAjax.vars.loops[i].vars.args[ query_var ] ) {
 
 						// Change query-rules store in instance-local data & rebuild instance-loop
 						wpAjax.vars.loops[i].vars.args[ query_var ] = value;
 
 					}
+
+
 				}
 
 				wpAjax.vars.loops[i].vars.page = 1;
