@@ -263,7 +263,7 @@
 					local_term = [ local_term ];
 				}
 
-				console.log(local_taxo,local_term )
+				// console.log(local_taxo,local_term )
 				// var currentTaxQuery = wpAjax.vars.loops[i].vars.args['tax_query'];
 
 				if ( taxQueryHolder.length > 1 ) {
@@ -317,7 +317,7 @@
 			}
 
 			if( addTaxQuery ){
-				console.log('taxQueryHolder',taxQueryHolder);
+				// console.log('taxQueryHolder',taxQueryHolder);
 				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
 
 			}else{
@@ -326,7 +326,7 @@
 				}
 			}
 
-			console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
+			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
 			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
 
 		},
@@ -656,25 +656,78 @@
 
 				} else {
 
-					// todo: migrate post_type functionality to use taxonomy/terms
-					// Make use of wpAjax.vars.loops[ i ].var.taxo && wpAjax.vars.loops[ i ].var.terms to do this,
-					// consider just using wpAjax.vars.loops[ i ].var.taxo as multideimensional/obj
-					//
-					if( value !== wpAjax.vars.loops[i].vars.args[ query_var ] ) {
+					if ( queryvar === 'category' || queryvar === 'post_tag' ) {
 
-						// Change query-rules store in instance-local data & rebuild instance-loop
-						wpAjax.vars.loops[i].vars.args[ query_var ] = value;
+						if ( -1 !== queryval.indexOf( ',' ) ) {
+							queryval = queryval.split(',');
+						} else {
+							queryval = [ queryval ];
+						}
+
+						var hasTaxFromInit = false;
+						if ( wpAjax.vars.loops[i].vars.args['tax_query'].length > 1 ) {
+
+							for ( var rule in wpAjax.vars.loops[i].vars.args['tax_query'] ) {
+
+								if ( ! wpAjax.vars.loops[i].vars.args['tax_query'][ rule ].hasOwnProperty( 'taxonomy' ) ) {
+
+									continue;
+
+								} else if ( queryvar === wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'taxonomy' ]  ) {
+
+									hasTaxFromInit = true;
+									for ( var term in queryval ) {
+
+										if ( -1 === wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].indexOf( queryval[ term ] ) ) {
+
+											wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].push( queryval[ term ] );
+
+										} else {
+
+											for ( var j = wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length; j --; ) {
+
+												if ( wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ][ j ] === queryval[ term ] ) {
+
+													wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].splice( j, 1 );
+
+													if ( wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length < 1 ) {
+															delete wpAjax.vars.loops[i].vars.args['tax_query'][ rule ];
+													}
+
+												}
+											}
+
+										}
+									}
+
+								}
+
+
+							}
+
+							if ( ! hasTaxFromInit ) {
+
+								wpAjax.vars.loops[i].vars.args['tax_query'].push({
+									"taxonomy": queryvar,
+									"field": "slug",
+									"terms": queryval,
+									"operator": "AND"
+								});
+
+							}
+
+						} else {
+
+							wpAjax.vars.loops[i].vars.args['tax_query'].push({
+								"taxonomy": queryvar,
+								"field": "slug",
+								"terms": queryval,
+								"operator": "AND"
+							});
+
+						}
 
 					}
-
-					var currentRules = wpAjax.vars.loops[i].vars.args['tax_query'] || [];
-
-					for ( var rule in currentRules ) {
-
-
-
-					}
-
 
 				}
 
@@ -690,7 +743,6 @@
 
 				wpAjax.init_ajax( i );
 
-				console.log('inner',wpAjax.vars.loops[i].vars.data);
 
 			} else {
 
