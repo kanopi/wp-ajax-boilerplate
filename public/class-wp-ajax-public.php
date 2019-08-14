@@ -190,10 +190,15 @@ class Wp_Ajax_Public {
 		if ( ! empty( $props['post_type'] ) ) :
 			$attrs[ 'post_type' ] = $props['post_type'];
 		endif;
-
-		if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
-			$attrs[ $props['taxo'] ] = $props['term'];
+		if ( ! empty( $props['taxo'] ) ) :
+			$attrs[ 'taxo' ] = $props['taxo'];
 		endif;
+		if ( ! empty( $props['term'] ) ) :
+			$attrs[ 'term' ] = $props['term'];
+		endif;
+		// if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
+		// 	$attrs[ $props['taxo'] ] = $props['term'];
+		// endif;
 
 		ob_start();
 		// output attributes on wrapper, need nicer way to do this.
