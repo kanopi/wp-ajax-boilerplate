@@ -119,7 +119,7 @@
 				},
 				success : function( data ){
 
-					// console.log(i,data);
+					console.log(i,data);
 					if( data ) {
 
 						if( data.info.found_posts > 0 ) {
@@ -208,17 +208,15 @@
 
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 
-			// var taxQueryHolder = [ {"relation": "AND"} ],
-			// addTaxQuery = false;
-
 			var appliedUrlParams = wpAjax.applyUrlParams( i ),
-			taxQueryHolder = [ {"relation": "AND"} ],
 			addTaxQuery = false;
 
 			if ( appliedUrlParams.add_tax_query ) {
-				taxQueryHolder = appliedUrlParams.tax_query_holder;
+				var taxQueryHolder = appliedUrlParams.tax_query_holder;
+				addTaxQuery = true;
+			} else {
+				taxQueryHolder = [ {"relation": "AND"} ]
 			}
-			addTaxQuery = appliedUrlParams.add_tax_query;
 
 			// instance specific default overrides
 
@@ -257,7 +255,6 @@
 			local_term = wpAjax.vars.containerWraps[ i ].getAttribute( 'term' ),
 			hasTaxFromUrlParam = false;
 
-			// console.log(local_taxo,local_term )
 			if ( local_taxo && local_term ) {
 
 				if ( -1 !== local_term.indexOf( ',' ) ) {
@@ -266,31 +263,27 @@
 					local_term = [ local_term ];
 				}
 
-				var currentTaxQuery = wpAjax.vars.loops[i].vars.args['tax_query'];
+				console.log(local_taxo,local_term )
+				// var currentTaxQuery = wpAjax.vars.loops[i].vars.args['tax_query'];
 
-				if ( currentTaxQuery.length ) {
+				if ( taxQueryHolder.length > 1 ) {
 
-					for ( var rule in currentTaxQuery ) {
+					for ( var rule in taxQueryHolder ) {
 
 						// skip relationship / non taxonomy/term indices
-						if ( ! currentTaxQuery[ rule ].hasOwnProperty( 'taxonomy' ) ) {
+						if ( ! taxQueryHolder[ rule ].hasOwnProperty( 'taxonomy' ) ) {
+
 							continue;
-						} else {
-							if ( local_taxo === currentTaxQuery[ rule ][ 'taxonomy' ]  ) {
 
-								hasTaxFromUrlParam = true;
+						} else if ( local_taxo === taxQueryHolder[ rule ][ 'taxonomy' ]  ) {
 
-								for ( var term in local_term ) {
-									if ( ! currentTaxQuery[ rule ][ 'terms' ].indexOf( local_term[ term ] ) ) {
-
-										currentTaxQuery[ rule ][ 'terms' ].push( term );
-
-										addTaxQuery = true;
-
-									}
+							hasTaxFromUrlParam = true;
+							for ( var term in local_term ) {
+								if ( -1 === taxQueryHolder[ rule ][ 'terms' ].indexOf( local_term[ term ] ) ) {
+									taxQueryHolder[ rule ][ 'terms' ].push( local_term[ term ] );
 								}
-
 							}
+
 						}
 
 					}
@@ -324,7 +317,7 @@
 			}
 
 			if( addTaxQuery ){
-
+				console.log('taxQueryHolder',taxQueryHolder);
 				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
 
 			}else{
@@ -333,7 +326,7 @@
 				}
 			}
 
-			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
+			console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
 			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
 
 		},
@@ -379,11 +372,12 @@
 
 								}else{
 
-									var taxTerms = wpAjax.vars.loops[i].vars.query_params[index];
+									var taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
 									taxQueryHolder.push({
 										"taxonomy": index,
 										"field": "slug",
-										"terms": taxTerms
+										"terms": taxTerms,
+										"operator": "AND"
 									});
 
 								}
@@ -406,11 +400,12 @@
 
 								}else{
 
-									var taxTerms = wpAjax.vars.loops[i].vars.query_params[index];
+									var taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
 									taxQueryHolder.push({
 										"taxonomy": index,
 										"field": "slug",
-										"terms": taxTerms
+										"terms": taxTerms,
+										"operator": "AND"
 									});
 								}
 
