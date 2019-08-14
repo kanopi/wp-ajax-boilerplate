@@ -138,13 +138,13 @@
 
 							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].innerHTML = '<p>Sorry, no posts matched your criteria</p>';
 
-							// wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = 'none';
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'no more found';
 
 						}
 
 					} else {
 
-						// wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = 'none';
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'no more found';
 
 					}
 				}
@@ -180,17 +180,25 @@
 				success : function( data ){
 					if( data ) {
 
-						wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
+						if( data.info.found_posts > 0 ) {
 
-						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', wpAjax.buildLoopItem( data.loop ) );
+							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
 
-						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.container )[0].insertAdjacentHTML( 'beforeend', wpAjax.buildLoopItem( data.loop ) );
 
-						wpAjax.vars.loops[i].vars.page++;
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'load more';
+
+							wpAjax.vars.loops[i].vars.page++;
+
+						} else {
+
+							wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'no more found';
+
+						}
 
 					} else {
 
-						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].style.display = none;
+						wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'no more found';
 
 					}
 				}
