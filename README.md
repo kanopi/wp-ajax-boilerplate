@@ -12,7 +12,7 @@ Ajax-output can be filtered in a number of ways.
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
 `?ajax_post_type=post&post_tag=foo` would output posts with the tag "foo".
 `?category=bar` would output posts in the "bar" category.
-1. Secondly, shortcode attributes (translated into data-attributes (for those who speak geek)) can be used to filter the default queries on a per-loop basis.
+1. Secondly, shortcode attributes (translated into data-attributes (for those who speak geek)) can be used to filter the default queries on a per-loop basis. 
 `[ajax post_type="post"][/ajax]` will output posts, even if `?ajax_post_type=page` is set in the url.
 1. Finally, additional filters can be added after pageload
 
