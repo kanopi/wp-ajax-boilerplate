@@ -271,9 +271,6 @@
 					local_term = [ local_term ];
 				}
 
-				// console.log(local_taxo,local_term )
-				// var currentTaxQuery = wpAjax.vars.loops[i].vars.args['tax_query'];
-
 				if ( taxQueryHolder.length > 1 ) {
 
 					for ( var rule in taxQueryHolder ) {
