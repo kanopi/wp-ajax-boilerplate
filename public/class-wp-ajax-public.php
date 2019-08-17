@@ -298,10 +298,11 @@ class Wp_Ajax_Public {
 			// elseif ( 'tag-list' === 'ux' ) { }
 			// elseif ( 'checkbox' === 'ux' ) { }
 
-			if ( ! empty( $output ) ) {
-				echo '<div class="wp-ajax-filter--wrap">'.$output.'</div>';
-			}
+		}
 
+
+		if ( ! empty( $output ) ) {
+			echo '<div class="wp-ajax-filter--wrap">'.$output.'</div>';
 		}
 
 		return ob_get_clean();

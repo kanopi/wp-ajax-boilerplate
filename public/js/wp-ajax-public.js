@@ -11,8 +11,6 @@
 			loops : {},
 			params : window.location.search.replace( '?', '' ),
 			containerWraps : document.getElementsByClassName( 'wp-ajax-wrap' ),
-			// filterWraps : document.getElementsByClassName( 'wp-ajax-filter--wrap' ),
-			// filterOptions : document.getElementsByClassName( 'wp-ajax-filter--option' ),
 			container : 'wp-ajax-feed',
 			button : 'wp-ajax-load',
 		},
@@ -21,6 +19,7 @@
 		* Build data-models for each loop
 		**/
 		setup : function(){
+
 			if ( wpAjax.vars.containerWraps.length ) {
 
 				var sub_params 	   = wpAjax.vars.params.split('&'),
@@ -57,6 +56,7 @@
 
 				}
 			}
+
 		},
 
 		/*
@@ -79,7 +79,6 @@
 		**/
 		init : function(){
 
-			// console.log( 'init: wpAjax.vars', wpAjax.vars );
 			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
 				for ( var i in wpAjax.vars.loops ) {
 
@@ -102,10 +101,12 @@
 
 		},
 
+		/*
+		* AJAX Request for wpAjax.init()
+		* @param {number} i The index of the loop instance
+		**/
 		init_ajax : function( i ) {
 
-			// console.log( 'init_ajax: wpAjax.vars.loops[i].vars.data', wpAjax.vars.loops[i].vars.data );
-			// todo: build queue, rather than fire off a request for each
 			return $.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
 				data : wpAjax.vars.loops[i].vars.data,
@@ -118,7 +119,6 @@
 				},
 				success : function( data ){
 
-					// console.log(i,data);
 					if( data ) {
 
 						if( data.info.found_posts > 0 ) {
@@ -207,11 +207,9 @@
 
 		/*
 		* Check for query-params & add to tax-query
-		* For example purposes only (at the moment)
+		* @param {number} i The index of the loop instance
 		**/
 		applyTerms : function( i ){
-
-			// console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
 
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 
@@ -322,7 +320,6 @@
 			}
 
 			if( addTaxQuery ){
-				// console.log('taxQueryHolder',taxQueryHolder);
 				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
 
 			}else{
@@ -331,11 +328,14 @@
 				}
 			}
 
-			// console.log('wpAjax.vars.loops[i].vars.args',wpAjax.vars.loops[i].vars.args);
 			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
 
 		},
 
+		/*
+		* Add URL Param Arguments to AJAX Query
+		* @param {number} i The index of the loop instance
+		**/
 		applyUrlParams : function ( i ){
 
 			var taxQueryHolder = [ {"relation": "AND"} ],
@@ -446,7 +446,6 @@
 
 			return { 'add_tax_query' : addTaxQuery, 'tax_query_holder' : taxQueryHolder };
 
-
 		},
 
 		/*
@@ -485,6 +484,7 @@
 		* Build URL Object
 		**/
 		buildUrlObject : function(){
+
 		    dest = window.location.origin,
 		    params = window.location.search.replace( '?', '' ),
 		    sub_params_out = {};
@@ -503,12 +503,14 @@
 		    }
 
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
+
 		},
 
 		/*
 		* Add URL Param
 		**/
 		addUrlParam : function( e ) {
+
 			e.preventDefault();
 
 			var
@@ -544,6 +546,7 @@
 		* Remove URL Param
 		**/
 		removeUrlParam : function( e ) {
+
 			e.preventDefault();
 
 			var
@@ -578,12 +581,14 @@
 			searchString += searchSegments.join( '&' );
 
 			window.location = urlObj.dest + searchString;
+
 		},
 
 		/*
 		* Build URL Object
 		**/
 		buildUrlObject : function(){
+
 		    var
 			dest = window.location.origin,
 		    params = decodeURIComponent( window.location.search.replace( '?', '' ) ),
@@ -602,6 +607,7 @@
 		    }
 
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
+
 		},
 
 		/*
@@ -620,8 +626,6 @@
 				// button specifics
 				queryvar = e.target.getAttribute( 'data-query_var' ),
 				queryval = e.target.getAttribute( 'data-query_val' );
-
-				// console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -741,8 +745,6 @@
 
 				}
 
-				// console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
-
 				wpAjax.vars.loops[i].vars.page = 1;
 
 				wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
@@ -765,7 +767,7 @@
 				}
 
 			}
-
+			
 		},
 
 		isEmpty : function(obj) {
@@ -799,10 +801,6 @@
 	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
 	    }
 
-		// var filterWraps = document.getElementsByClassName('wp-ajax-filter--wrap');
-	    // for ( var i = 0; i < filterOptions.length; i++ ) {
-	    //   filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
-	    // }
 
 	});
 

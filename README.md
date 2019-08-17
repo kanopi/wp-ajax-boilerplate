@@ -10,10 +10,10 @@ Use `[ajax][/ajax]` shortcodes to output loops of posts asynchronously.
 
 Ajax-output can be filtered in a number of ways.
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
-   `?ajax_post_type=post&post_tag=foo` would output posts with the tag "foo".
-   `?category=bar` would output posts in the "bar" category.
-1. Secondly, shortcode attributes (translated into data-attributes (for those who speak geek)) can be used to filter the default queries on a per-loop basis.
-   `[ajax post_type="post"][/ajax]` will output posts, even if `?ajax_post_type=page` is set in the url.
+   - `?ajax_post_type=post&post_tag=foo` would output posts with the tag "foo".
+   - `?category=bar` would output posts in the "bar" category.
+1. Secondly, shortcode attributes ( translated into data-attributes on the ajax-loop container element ) can be used to filter the default queries on a per-loop basis.
+   - `[ajax post_type="post"][/ajax]` will output posts, even if `?ajax_post_type=page` is set in the url.
 1. Finally, additional filters can be added after pageload
 
 
@@ -24,7 +24,9 @@ There are 2x shortcodes to work with: `[ajax][/ajax]` & `[ajax_filter]`. Please 
 ### AJAX Loop Output
 Use `[ajax][/ajax]` shortcode (or `.wp-ajax-wrap` class) to output ajax loop with async, load-more functionality. Use `post_type` & `taxo/term` parameters to pre-filter loop query-params after get-params are applied but before asynchronously loaded content is rendered.
 
-The `[ajax][/ajax]` shortcode outputs a loop which is populated by an ajax request & features a loadmore button (currently limited to two results per request to make testing easier). If you want to, you can pre-filter the output. The default output is all posts, but let's say you want pages, use the following: `[ajax post_type="page"][/ajax]` if you want to display only posts from a particular category use the following: `[ajax taxo="category" term="dog"][/ajax]` the taxonomy filters are currently exclusive by default (they use AND, not OR), so `[ajax taxo="post_tag" term="hat,coat"][/ajax]` would output posts which are tagged both hat & coat, but not either or. Note that the parameters are the slug of the given taxonomy-term.
+The `[ajax][/ajax]` shortcode outputs a loop which is populated by an ajax request & features a loadmore button (currently limited to two results per request to make testing easier). If you want to, you can pre-filter the output.
+
+ The default output is all posts, but let's say you want pages, use the following: `[ajax post_type="page"][/ajax]` if you want to display only posts from a particular category use the following: `[ajax taxo="category" term="dog"][/ajax]` the taxonomy filters are currently exclusive by default (they use AND, not OR), so `[ajax taxo="post_tag" term="hat,coat"][/ajax]` would output posts which are tagged both hat & coat, but not either or. Note that the parameters are the slug of the given taxonomy-term.
 
 We can also filter all ajax-shortcode loops on a page via url-params. Visiting a page with an ajax shortcode & adding get-parameters will filter ALL ajax shortcodes on that page. For instance, if we have two ajax shortcodes on a page: `[ajax][/ajax]` & `[ajax taxo="category" term="dogs"][/ajax]` & we add `?category=cats` to the url, the first shortcode would output posts in the Cats category & the second shortcode would output only posts which are tagged both Cats & Dogs.
 
@@ -66,8 +68,12 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
 
 <div class="wp-ajax-filter--wrap">
     <div class="wp-ajax-filter">
-        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
-        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
+        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive"
+                data-query_var="ajax_post_type"
+                data-query_val="post">post</button>
+        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive"
+                data-query_var="ajax_post_type" 
+                data-query_val="page">page</button>
     </div>
 </div>
 
