@@ -68,7 +68,6 @@
 				for ( var i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
 
 					wpAjax.applyTerms( i );
-					// wpAjax.applyUrlParams( i );
 
 				}
 			}
@@ -226,8 +225,9 @@
 				taxQueryHolder = [ {"relation": "AND"} ]
 			}
 
-			// instance specific default overrides
-
+			/*
+			* index specific default overrides, applied by attributes on container element
+			**/
 			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
 			if ( local_post_type ) {
 
@@ -483,6 +483,7 @@
 			return returnElement;
 
 		},
+
 		/*
 		* Build URL Object
 		**/
@@ -606,6 +607,9 @@
 		    return { 'dest': dest, 'sub_params_out': sub_params_out };
 		},
 
+		/*
+		* Click Handler for filterOptions
+		**/
 		click_filterOptions : function( e ){
 
 			var parentLoop = e.target.closest('.wp-ajax-wrap');
@@ -620,7 +624,7 @@
 				queryvar = e.target.getAttribute( 'data-query_var' ),
 				queryval = e.target.getAttribute( 'data-query_val' );
 
-				// console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+				console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -673,8 +677,11 @@
 						}
 
 						var hasTaxFromInit = false;
-						if ( wpAjax.vars.loops[i].vars.args['tax_query'].length > 1 ) {
 
+						if ( ! wpAjax.vars.loops[i].vars.args['tax_query'] ) {
+							wpAjax.vars.loops[i].vars.args['tax_query'] = [ {"relation": "AND"} ];
+						}
+						if ( wpAjax.vars.loops[i].vars.args['tax_query'].length > 1 ) {
 							for ( var rule in wpAjax.vars.loops[i].vars.args['tax_query'] ) {
 
 								if ( ! wpAjax.vars.loops[i].vars.args['tax_query'][ rule ].hasOwnProperty( 'taxonomy' ) ) {
@@ -709,8 +716,6 @@
 									}
 
 								}
-
-
 							}
 
 							if ( ! hasTaxFromInit ) {
@@ -738,6 +743,8 @@
 					}
 
 				}
+
+				console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
 				wpAjax.vars.loops[i].vars.page = 1;
 

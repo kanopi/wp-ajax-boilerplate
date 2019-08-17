@@ -41,6 +41,7 @@ This plugin is an attempt at organizing and aggregating different techniques for
 
 == ToDos ==
 
+- Taxo/Term Filter Shortcode
 - More filter options
 - Valid post-types & taxonomy whitelists
 - Hide load-more buttons if found-posts < limit/per_page || limit*index >= found-posts
