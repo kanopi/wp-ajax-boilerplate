@@ -118,7 +118,7 @@
 				},
 				success : function( data ){
 
-					console.log(i,data);
+					// console.log(i,data);
 					if( data ) {
 
 						if( data.info.found_posts > 0 ) {
@@ -211,7 +211,7 @@
 		**/
 		applyTerms : function( i ){
 
-			console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
+			// console.log( 'applyTerms wpAjax.vars', wpAjax.vars );
 
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 
@@ -621,7 +621,7 @@
 				queryvar = e.target.getAttribute( 'data-query_var' ),
 				queryval = e.target.getAttribute( 'data-query_val' );
 
-				console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+				// console.log( 'PRE click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -741,7 +741,7 @@
 
 				}
 
-				console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
+				// console.log( 'POST click_filterOptions wpAjax.vars.loops[i].vars.args', wpAjax.vars.loops[i].vars.args )
 
 				wpAjax.vars.loops[i].vars.page = 1;
 
