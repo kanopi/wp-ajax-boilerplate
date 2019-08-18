@@ -24,7 +24,7 @@ Ajax-output can be filtered in a number of ways.
 
 ## Shortcodes
 
-There are 2x shortcodes to work with: `[ajax][/ajax]` & `[ajax_filter]`. Please don't use these for a production build yet & expect a smooth update, these shortcodes may be refactored & their parameter names changed... But if you're feeling daring, here's how to use them:  
+There are 2x shortcodes to work with: `[ajax][/ajax]` & `[ajax_filter]`. 
 
 ### AJAX Loop Output
 Use `[ajax][/ajax]` shortcode (or `.wp-ajax-wrap` class) to output ajax loop with async, load-more functionality. Use `post_type` & `taxo/term` parameters to pre-filter loop query-params after get-params are applied but before asynchronously loaded content is rendered.
