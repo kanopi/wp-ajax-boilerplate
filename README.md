@@ -4,6 +4,11 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 > Custom functionality located in [/public/js/wp-ajax-public.js](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/js/wp-ajax-public.js) & [/public/class-wp-ajax-public.php](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/class-wp-ajax-public.php). Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
 
+## Setup
+
+1. Place a copy of this repo at ./wp-content/plugins in your WordPress installation.
+1. Activate plugin
+
 ## Description
 
 Use `[ajax][/ajax]` shortcodes to output loops of posts asynchronously.
@@ -14,7 +19,7 @@ Ajax-output can be filtered in a number of ways.
    - `?category=bar` would output posts in the "bar" category.
 1. Secondly, shortcode attributes ( translated into data-attributes on the ajax-loop container element ) can be used to filter the default queries on a per-loop basis.
    - `[ajax post_type="post"][/ajax]` will output posts, even if `?ajax_post_type=page` is set in the url.
-1. Finally, additional filters can be added after pageload
+1. Finally, additional filters can be added after pageload via the
 
 
 ## Shortcodes
@@ -65,18 +70,16 @@ If we wanted to output pages by default & still have local filters, we could use
 Equivalent in functionality to "Shortcodes Reference / Testing Interface"
 
 ```
+.wp-ajax-filter outside of .wp-ajax-wrap will modify global get-params & cause page refresh
 
 <div class="wp-ajax-filter--wrap">
     <div class="wp-ajax-filter">
-        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive"
-                data-query_var="ajax_post_type"
-                data-query_val="post">post</button>
-        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive"
-                data-query_var="ajax_post_type" 
-                data-query_val="page">page</button>
+        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
+        <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
     </div>
 </div>
 
+.wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap
 <div class="wp-ajax-wrap" post_type="page">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -87,6 +90,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
+post_type attribute adds default local filters
 <div class="wp-ajax-wrap" post_type="post">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -107,7 +111,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-<div class="wp-ajax-wrap" taxo="post_tag">
+taxo & term attributes adds default tax-query
+<div class="wp-ajax-wrap" taxo="post_tag" term="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
@@ -117,6 +122,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
+.wp-ajax-filter inside .wp-ajax-wrap, local tax_query control
 <div class="wp-ajax-wrap" taxo="post_tag">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
