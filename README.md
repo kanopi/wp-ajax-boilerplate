@@ -6,7 +6,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 ## Setup
 
-1. Place a copy of this repo at ./wp-content/plugins in your WordPress installation.
+1. Place a copy of this repo at ./wp-content/plugins/wp-ajax-boilerplate in your WordPress installation.
 1. Activate plugin
 
 ## Description
@@ -70,8 +70,7 @@ If we wanted to output pages by default & still have local filters, we could use
 Equivalent in functionality to "Shortcodes Reference / Testing Interface"
 
 ```
-.wp-ajax-filter outside of .wp-ajax-wrap will modify global get-params & cause page refresh
-
+<!-- .wp-ajax-filter outside of .wp-ajax-wrap will modify global get-params & cause page refresh -->
 <div class="wp-ajax-filter--wrap">
     <div class="wp-ajax-filter">
         <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
@@ -79,7 +78,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     </div>
 </div>
 
-.wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap
+<!-- .wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap -->
 <div class="wp-ajax-wrap" post_type="page">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -90,7 +89,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-post_type attribute adds default local filters
+<!-- post_type attribute adds default local filters -->
 <div class="wp-ajax-wrap" post_type="post">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -111,7 +110,7 @@ post_type attribute adds default local filters
     <button class="wp-ajax-load">load more</button>
 </div>
 
-taxo & term attributes adds default tax-query
+<!-- taxo & term attributes adds default tax-query -->
 <div class="wp-ajax-wrap" taxo="post_tag" term="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -122,7 +121,7 @@ taxo & term attributes adds default tax-query
     <button class="wp-ajax-load">load more</button>
 </div>
 
-.wp-ajax-filter inside .wp-ajax-wrap, local tax_query control
+<!-- .wp-ajax-filter inside .wp-ajax-wrap, local tax_query control -->
 <div class="wp-ajax-wrap" taxo="post_tag">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -134,6 +133,7 @@ taxo & term attributes adds default tax-query
     <button class="wp-ajax-load">load more</button>
 </div>
 
+<!-- multiple .wp-ajax-filter inside .wp-ajax-wrap compliment each other -->
 <div class="wp-ajax-wrap" taxo="post_tag">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
