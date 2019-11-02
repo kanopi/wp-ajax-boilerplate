@@ -225,7 +225,9 @@
 
 			/*
 			* index specific default overrides, applied by attributes on container element
+			* todo: consider utility funtion for top-level font-end - wp-query attribute mapping. notice that post_type & posts_per_page follow same path from url-param -> output element data-att -> runtime ux configurability
 			**/
+
 			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
 			if ( local_post_type ) {
 
@@ -252,10 +254,38 @@
 					} else {
 						wpAjax.vars.loops[i].vars.args['post_type'] = [ local_post_type ];
 					}
-
-
 				}
 			}
+
+			var local_posts_per_page = wpAjax.vars.containerWraps[ i ].getAttribute( 'posts_per_page' );
+			if ( local_posts_per_page ) {
+
+				if ( -1 !== local_posts_per_page.indexOf( ',' ) ) {
+
+					local_posts_per_page = local_posts_per_page.split(',');
+					for ( var pt in local_posts_per_page ) {
+						if ( wpAjax.vars.loops[i].vars.args['posts_per_page'] ) {
+							if ( -1 === wpAjax.vars.loops[i].vars.args['posts_per_page'].indexOf( pt ) ) {
+								wpAjax.vars.loops[i].vars.args['posts_per_page'].push( pt )
+							}
+						} else {
+							wpAjax.vars.loops[i].vars.args['posts_per_page'] = [ pt ];
+						}
+
+					}
+
+				} else {
+
+					if ( wpAjax.vars.loops[i].vars.args['posts_per_page'] ) {
+						if ( -1 === wpAjax.vars.loops[i].vars.args['posts_per_page'].indexOf( local_posts_per_page ) ) {
+							wpAjax.vars.loops[i].vars.args['posts_per_page'].push( local_posts_per_page )
+						}
+					} else {
+						wpAjax.vars.loops[i].vars.args['posts_per_page'] = [ local_posts_per_page ];
+					}
+				}
+			}
+
 
 			var local_taxo = wpAjax.vars.containerWraps[ i ].getAttribute( 'taxo' ),
 			local_term = wpAjax.vars.containerWraps[ i ].getAttribute( 'term' ),
@@ -361,6 +391,20 @@
 
 							break;
 
+							case 'ajax_posts_per_page' :
+
+								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
+
+									wpAjax.vars.loops[i].vars.args['posts_per_page'] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+
+								} else {
+
+									wpAjax.vars.loops[i].vars.args['posts_per_page'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+
+								}
+
+							break;
+
 							case 'post_tag' :
 
 								addTaxQuery = true;
@@ -458,19 +502,14 @@
 			for (var index in currentSet) {
 
 				returnElement += '<div class="teaser teaser--'+currentSet[index]['post_type']+'">';
-
 				returnElement += '<div class="teaser--content">';
-				if(currentSet[index]['crumbs']){
-					returnElement += '<div class="teaser--meta">'+currentSet[index]['crumbs']+'</div>';
-				}
+
 				returnElement += '<h3 class="teaser--title"><a class="teaser--link" href="'+currentSet[index]['the_permalink']+'" aria-label="'+currentSet[index]['the_title']+'">'+currentSet[index]['the_title']+'</a></h3>';
 				returnElement += '<div class="teaser--excerpt">'+currentSet[index]['the_excerpt']+'</div>';
 				if(currentSet[index]['post_type']=='post'){
 					returnElement += '<div class="teaser--posted-on">'+currentSet[index]['posted_date']+'</div>';
 				}
-				if(currentSet[index]['focus_areas']){
-					returnElement += '<div class="teaser--terms">'+currentSet[index]['focus_areas']+'</div>';
-				}
+
 				returnElement += '</div>';
 				returnElement += '</div>';
 
@@ -621,6 +660,7 @@
 				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
 				// Local wrapper default settings
 				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
+				posts_per_page = e.target.closest('.wp-ajax-wrap').getAttribute( 'posts_per_page' ),
 				taxo = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
 				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' ),
 				// button specifics
@@ -667,7 +707,39 @@
 
 					}
 
-				} else {
+				} else if ( queryvar === 'ajax_posts_per_page' ) {
+
+					var currentRules = wpAjax.vars.loops[i].vars.args['posts_per_page'] || [];
+
+					if ( posts_per_page && -1 === currentRules.indexOf( posts_per_page ) ) {
+						currentRules.push( posts_per_page );
+					}
+
+					if ( -1 === currentRules.indexOf( queryval ) && posts_per_page !== queryval ) {
+
+						currentRules.push( queryval );
+
+					} else {
+						if ( currentRules.length ) {
+							for ( var j = currentRules.length; j --; ) {
+								if ( currentRules[ j ] === queryval ) {
+									currentRules.splice( j, 1 );
+								}
+							}
+						}
+					}
+
+					if ( currentRules.length ) {
+
+						wpAjax.vars.loops[i].vars.args['posts_per_page'] = currentRules;
+
+					} else {
+
+						wpAjax.applyUrlParams( i );
+
+					}
+
+				} else { {
 
 					if ( queryvar === 'category' || queryvar === 'post_tag' ) {
 
@@ -767,7 +839,7 @@
 				}
 
 			}
-			
+
 		},
 
 		isEmpty : function(obj) {
