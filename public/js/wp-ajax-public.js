@@ -45,7 +45,7 @@
 							taxo : "none",
 							terms : "all",
 							args : {
-								posts_per_page : 2,
+								// posts_per_page : 2,
 							},
 							query : "",
 							data : {},
