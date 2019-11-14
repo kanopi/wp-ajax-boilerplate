@@ -98,7 +98,7 @@
 		* @param {number} i The index of the loop instance
 		**/
 		init_ajax : function( i ) {
-			console.log( 'wpAjax.vars.loops[i].vars', wpAjax.vars.loops[i].vars );
+
 			return $.ajax({
 				url : wp_ajax_params.ajaxurl, // AJAX handler
 				data : wpAjax.vars.loops[i].vars.data,
