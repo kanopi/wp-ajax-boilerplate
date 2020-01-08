@@ -90,7 +90,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     </div>
 </div>
 
-<p>.wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap</p>
+<p>.wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap &  post_type="" or posts_per_page="" wrapper-attributes pre-define filtering within global-scope & above runtime filters</p>
 <div class="wp-ajax-wrap" post_type="page">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
