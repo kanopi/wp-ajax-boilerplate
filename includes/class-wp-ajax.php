@@ -183,9 +183,6 @@ class Wp_Ajax {
 
 		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'taxosearch_groupby' );
 
-		// todo: possibly remove
-		$this->loader->add_action( 'parse_query', $plugin_public, 'disable_canonical_redirect' );
-
 	}
 
 	/**

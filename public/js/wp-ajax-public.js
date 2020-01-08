@@ -39,17 +39,9 @@
 					wpAjax.vars.loops[ i ] = {
 						'vars' : {
 							page : 1,
-							limit : 2,
-							loadMoreLimit : 2,
-							isFirstClick : true,
-							taxo : "none",
-							terms : "all",
-							args : {
-								posts_per_page : 2,
-							},
+							args : {},
 							query : "",
 							data : {},
-							onPage : 0,
 							query_params : sub_params_out,
 						},
 					};
@@ -157,7 +149,6 @@
 
 			var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
 
-			wpAjax.vars.loops[i].vars.args['posts_per_page'] = wpAjax.vars.loops[i].vars.limit;
 			wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
 
 			wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
@@ -225,7 +216,9 @@
 
 			/*
 			* index specific default overrides, applied by attributes on container element
+			* todo: consider utility funtion for top-level font-end - wp-query attribute mapping. notice that post_type & posts_per_page follow same path from url-param -> output element data-att -> runtime ux configurability
 			**/
+
 			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
 			if ( local_post_type ) {
 
@@ -252,10 +245,17 @@
 					} else {
 						wpAjax.vars.loops[i].vars.args['post_type'] = [ local_post_type ];
 					}
-
-
 				}
 			}
+
+			var local_posts_per_page = wpAjax.vars.containerWraps[ i ].getAttribute( 'posts_per_page' );
+			if ( local_posts_per_page ) {
+
+				wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( local_posts_per_page, 10 );
+				wpAjax.vars.loops[i].vars.args['limit'] = parseInt( local_posts_per_page, 10 );
+
+			}
+
 
 			var local_taxo = wpAjax.vars.containerWraps[ i ].getAttribute( 'taxo' ),
 			local_term = wpAjax.vars.containerWraps[ i ].getAttribute( 'term' ),
@@ -361,6 +361,13 @@
 
 							break;
 
+							case 'ajax_posts_per_page' :
+
+								wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+								wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+
+							break;
+
 							case 'post_tag' :
 
 								addTaxQuery = true;
@@ -458,19 +465,14 @@
 			for (var index in currentSet) {
 
 				returnElement += '<div class="teaser teaser--'+currentSet[index]['post_type']+'">';
-
 				returnElement += '<div class="teaser--content">';
-				if(currentSet[index]['crumbs']){
-					returnElement += '<div class="teaser--meta">'+currentSet[index]['crumbs']+'</div>';
-				}
+
 				returnElement += '<h3 class="teaser--title"><a class="teaser--link" href="'+currentSet[index]['the_permalink']+'" aria-label="'+currentSet[index]['the_title']+'">'+currentSet[index]['the_title']+'</a></h3>';
 				returnElement += '<div class="teaser--excerpt">'+currentSet[index]['the_excerpt']+'</div>';
 				if(currentSet[index]['post_type']=='post'){
 					returnElement += '<div class="teaser--posted-on">'+currentSet[index]['posted_date']+'</div>';
 				}
-				if(currentSet[index]['focus_areas']){
-					returnElement += '<div class="teaser--terms">'+currentSet[index]['focus_areas']+'</div>';
-				}
+
 				returnElement += '</div>';
 				returnElement += '</div>';
 
@@ -482,14 +484,15 @@
 
 		/*
 		* Build URL Object
+		* Returns dest: current url-base, sub_params_out: json-object with get-params as names & arrays built from csv-string
 		**/
 		buildUrlObject : function(){
 
-		    dest = window.location.origin,
+		    dest = window.location.origin + window.location.pathname,
 		    params = window.location.search.replace( '?', '' ),
 		    sub_params_out = {};
 
-		    dest += window.location.pathname;
+
 
 		    if ( params.length ) {
 		        var sub_params = params.split( '&' );
@@ -498,6 +501,7 @@
 		    if ( sub_params ) {
 		        for ( var i in sub_params ) {
 		            var item = sub_params[ i ].split( '=' );
+					
 		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
 		        }
 		    }
@@ -508,6 +512,8 @@
 
 		/*
 		* Add URL Param
+		* Adds new item onto array-type wp-query property.
+		* This function receives a key-value pair from element-attributes, creates the key on a destination url-string if does not exist & adds value
 		**/
 		addUrlParam : function( e ) {
 
@@ -523,7 +529,6 @@
 			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
 					urlObj.sub_params_out[ queryvar ].push( queryval );
-					// urlObj = buildUrlObject();
 				} else {
 					removeUrlParam( e );
 					return false;
@@ -544,6 +549,8 @@
 
 		/*
 		* Remove URL Param
+		* Remove item from array-type wp-query property.
+		* This function receives a key-value pair from element-attributes, removes the value on a destination url-string if present and removes key if is last value.
 		**/
 		removeUrlParam : function( e ) {
 
@@ -585,6 +592,32 @@
 		},
 
 		/*
+		* Swap URL Param
+		**/
+		swapUrlParam : function( e ) {
+
+			e.preventDefault();
+
+			var
+			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
+			urlObj = wpAjax.buildUrlObject(),
+			searchSegments = [],
+			searchString = '?';
+
+			urlObj.sub_params_out[ queryvar ] = [ queryval ];
+
+			for ( var item in urlObj.sub_params_out ) {
+				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
+			}
+
+			searchString += searchSegments.join( '&' );
+
+			window.location = urlObj.dest + searchString;
+
+		},
+
+		/*
 		* Build URL Object
 		**/
 		buildUrlObject : function(){
@@ -615,17 +648,19 @@
 		**/
 		click_filterOptions : function( e ){
 
-			var parentLoop = e.target.closest('.wp-ajax-wrap');
+			var parentLoop = e.target.closest('.wp-ajax-wrap'),
+			// button specifics
+			queryvar = e.target.getAttribute( 'data-query_var' ),
+			queryval = e.target.getAttribute( 'data-query_val' );
+
 			if ( parentLoop ) {
 
 				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
 				// Local wrapper default settings
 				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
+				posts_per_page = e.target.closest('.wp-ajax-wrap').getAttribute( 'posts_per_page' ),
 				taxo = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
-				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' ),
-				// button specifics
-				queryvar = e.target.getAttribute( 'data-query_var' ),
-				queryval = e.target.getAttribute( 'data-query_val' );
+				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -664,6 +699,15 @@
 					} else {
 
 						wpAjax.applyUrlParams( i );
+
+					}
+
+				} else if ( queryvar === 'ajax_posts_per_page' ) {
+
+					if ( queryval ) {
+
+						wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( queryval, 10 );
+						wpAjax.vars.loops[i].vars.args['limit'] = parseInt( queryval, 10 );
 
 					}
 
@@ -760,14 +804,23 @@
 
 			} else {
 
-				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
-					wpAjax.removeUrlParam( e );
+				if ( 'ajax_posts_per_page' === queryvar ) {
+
+					wpAjax.swapUrlParam( e );
+
 				} else {
-					wpAjax.addUrlParam( e );
+
+					if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
+						wpAjax.removeUrlParam( e );
+					} else {
+						wpAjax.addUrlParam( e );
+					}
+
 				}
 
+
 			}
-			
+
 		},
 
 		isEmpty : function(obj) {

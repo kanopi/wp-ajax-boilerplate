@@ -184,11 +184,14 @@ class Wp_Ajax_Public {
 	 */
 	function ajax_shortcode( $props, $content = null ) {
 
-		$props = shortcode_atts( [ 'post_type' => false, 'taxo' => false, 'term' => false, ], $props, 'ajax' );
+		$props = shortcode_atts( [ 'post_type' => false, 'posts_per_page' => false, 'taxo' => false, 'term' => false, ], $props, 'ajax' );
 		$attrs = [ 'class' => 'wp-ajax-wrap' ];
 
 		if ( ! empty( $props['post_type'] ) ) :
 			$attrs[ 'post_type' ] = $props['post_type'];
+		endif;
+		if ( ! empty( $props['posts_per_page'] ) ) :
+			$attrs[ 'posts_per_page' ] = $props['posts_per_page'];
 		endif;
 		if ( ! empty( $props['taxo'] ) ) :
 			$attrs[ 'taxo' ] = $props['taxo'];
@@ -249,6 +252,8 @@ class Wp_Ajax_Public {
 
 		if ( 'post_type' === $props['query_var'] ) {
 			$query_var = 'ajax_post_type';
+		} elseif ( 'posts_per_page' === $props['query_var'] ) {
+			$query_var = 'ajax_posts_per_page';
 		} else {
 			$query_var = sanitize_key( $props['query_var'] );
 		}
@@ -343,13 +348,5 @@ class Wp_Ajax_Public {
 	public function taxosearch_posts_groupby( $groupby ) {
 		return '';
 	}
-
-	public function disable_canonical_redirect( $query ) {
-		if ( ! empty( $_GET['wpjx'] ) && 1 === intval( $_GET['wpjx'] ) ) {
-			remove_filter( 'template_redirect', 'redirect_canonical' );
-		}
-	}
-
-
 
 }
