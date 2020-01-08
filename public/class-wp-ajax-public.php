@@ -219,7 +219,7 @@ class Wp_Ajax_Public {
 			echo do_shortcode( $content );
 		endif;
 		?>
-			<article class="wp-ajax-feed">JavaScript must be enabled to load content</article>
+			<div class="wp-ajax-feed">JavaScript must be enabled to load content</div>
 			<button class="wp-ajax-load">load more</button>
 		<?php
 		echo '</div>';

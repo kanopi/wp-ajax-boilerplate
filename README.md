@@ -8,23 +8,35 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 1. Place a copy of this repo at ./wp-content/plugins/wp-ajax-boilerplate in your WordPress installation.
 1. Activate plugin
+1. Add ajax-output markup to site via html or shortcode
+1. Ajax output can be filtered via get-params, element-attributes, & at runtime
 
 ## Description
 
-Use `[ajax][/ajax]` shortcodes to output loops of posts asynchronously.
+### Basic usage
+> Add the html below to a post or page ( or use the `[ajax][/ajax]` shortcode )
+```
+<!-- post_type attribute adds default local filters -->
+<div class="wp-ajax-wrap" post_type="post">
+    <div class="wp-ajax-feed">
+    </div>
+    <button class="wp-ajax-load">load more</button>
+</div>
+```
 
-Ajax-output can be filtered in a number of ways.
+#### Output can be filtered
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
    - `?ajax_post_type=post&post_tag=foo` would output posts with the tag "foo".
    - `?category=bar` would output posts in the "bar" category.
-1. Secondly, shortcode attributes ( translated into data-attributes on the ajax-loop container element ) can be used to filter the default queries on a per-loop basis.
+1. Secondly, shortcode attributes ( or data-attributes on the ajax-loop container html ) can be used to filter the default queries on a per-loop basis.
    - `[ajax post_type="post"][/ajax]` will output posts, even if `?ajax_post_type=page` is set in the url.
-1. Finally, additional filters can be added after pageload via the
+1. Finally, additional filters can be added after pageload via the filters markup/shortcodes
+1. Sumup: get params set global browser filter, element-attributes refine filters on a per-loop basis, & ux-interface can be used to filter within loops & at a global-level, depending if they're wrapped in a loop-container
 
 
 ## Shortcodes
 
-There are 2x shortcodes to work with: `[ajax][/ajax]` & `[ajax_filter]`. 
+There are 2x shortcodes to work with: `[ajax][/ajax]` & `[ajax_filter]`.
 
 ### AJAX Loop Output
 Use `[ajax][/ajax]` shortcode (or `.wp-ajax-wrap` class) to output ajax loop with async, load-more functionality. Use `post_type` & `taxo/term` parameters to pre-filter loop query-params after get-params are applied but before asynchronously loaded content is rendered.
@@ -86,6 +98,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -97,6 +111,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -106,6 +122,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
+		<div class="wp-ajax-feed">
+		</div>
     </div>
     <button class="wp-ajax-load">load more</button>
 </div>
@@ -118,6 +136,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -130,6 +150,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
         </div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -149,6 +171,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
         </div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 ```
