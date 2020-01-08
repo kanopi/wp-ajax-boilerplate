@@ -11,9 +11,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 1. Add ajax-output markup to site via html or shortcode
 1. Ajax output can be filtered via get-params, element-attributes, & at runtime
 
-## Description
-
-### Basic usage / quickstart
+## Basic usage / quickstart
 > Add the html below to a post or page ( or use the `[ajax][/ajax]` shortcode )
 ```
 <!-- post_type attribute adds default local filters -->
