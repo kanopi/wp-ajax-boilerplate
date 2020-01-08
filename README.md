@@ -13,7 +13,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 ## Description
 
-### Basic usage
+### Basic usage / quickstart
 > Add the html below to a post or page ( or use the `[ajax][/ajax]` shortcode )
 ```
 <!-- post_type attribute adds default local filters -->
@@ -122,9 +122,9 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
-		<div class="wp-ajax-feed">
-		</div>
     </div>
+	<div class="wp-ajax-feed">
+	</div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
