@@ -2,7 +2,8 @@
 
 A collection of tools for interfacing with wp-query asynchronously.
 
-> Custom functionality located in [/public/js/wp-ajax-public.js](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/js/wp-ajax-public.js) & [/public/class-wp-ajax-public.php](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/class-wp-ajax-public.php). Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
+> Custom functionality located in [/public/js/wp-ajax-public.js](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/js/wp-ajax-public.js) & [/public/class-wp-ajax-public.php](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/class-wp-ajax-public.php).
+> Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
 
 ## Setup
 
