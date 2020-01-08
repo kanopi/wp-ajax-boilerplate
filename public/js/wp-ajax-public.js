@@ -484,14 +484,15 @@
 
 		/*
 		* Build URL Object
+		* Returns dest: current url-base, sub_params_out: json-object with get-params as names & arrays built from csv-string
 		**/
 		buildUrlObject : function(){
 
-		    dest = window.location.origin,
+		    dest = window.location.origin + window.location.pathname,
 		    params = window.location.search.replace( '?', '' ),
 		    sub_params_out = {};
 
-		    dest += window.location.pathname;
+
 
 		    if ( params.length ) {
 		        var sub_params = params.split( '&' );
@@ -500,6 +501,7 @@
 		    if ( sub_params ) {
 		        for ( var i in sub_params ) {
 		            var item = sub_params[ i ].split( '=' );
+					
 		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
 		        }
 		    }
@@ -510,6 +512,8 @@
 
 		/*
 		* Add URL Param
+		* Adds new item onto array-type wp-query property.
+		* This function receives a key-value pair from element-attributes, creates the key on a destination url-string if does not exist & adds value
 		**/
 		addUrlParam : function( e ) {
 
@@ -525,7 +529,6 @@
 			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
 					urlObj.sub_params_out[ queryvar ].push( queryval );
-					// urlObj = buildUrlObject();
 				} else {
 					removeUrlParam( e );
 					return false;
@@ -546,6 +549,8 @@
 
 		/*
 		* Remove URL Param
+		* Remove item from array-type wp-query property.
+		* This function receives a key-value pair from element-attributes, removes the value on a destination url-string if present and removes key if is last value.
 		**/
 		removeUrlParam : function( e ) {
 
