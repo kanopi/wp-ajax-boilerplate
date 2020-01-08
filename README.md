@@ -82,7 +82,7 @@ If we wanted to output pages by default & still have local filters, we could use
 Equivalent in functionality to "Shortcodes Reference / Testing Interface"
 
 ```
-<!-- .wp-ajax-filter outside of .wp-ajax-wrap will modify global get-params & cause page refresh -->
+<p>.wp-ajax-filter outside of .wp-ajax-wrap will modify global get-params & cause page refresh</p>
 <div class="wp-ajax-filter--wrap">
     <div class="wp-ajax-filter">
         <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="post">post</button>
@@ -90,7 +90,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     </div>
 </div>
 
-<!-- .wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap -->
+<p>.wp-ajax-filter inside .wp-ajax-wrap will modify query within parent .wp-ajax-wrap</p>
 <div class="wp-ajax-wrap" post_type="page">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -103,7 +103,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-<!-- post_type attribute adds default local filters -->
+<p>post_type attribute adds default local filters</p>
 <div class="wp-ajax-wrap" post_type="post">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -128,7 +128,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-<!-- taxo & term attributes adds default tax-query -->
+<p>taxo & term attributes adds default tax-query</p>
 <div class="wp-ajax-wrap" taxo="post_tag" term="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -141,7 +141,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-<!-- .wp-ajax-filter inside .wp-ajax-wrap, local tax_query control -->
+<p>.wp-ajax-filter inside .wp-ajax-wrap, local tax_query control</p>
 <div class="wp-ajax-wrap" taxo="post_tag">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
@@ -155,7 +155,7 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
     <button class="wp-ajax-load">load more</button>
 </div>
 
-<!-- multiple .wp-ajax-filter inside .wp-ajax-wrap compliment each other -->
+<p>multiple .wp-ajax-filter inside .wp-ajax-wrap compliment each other</p>
 <div class="wp-ajax-wrap" taxo="post_tag">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">

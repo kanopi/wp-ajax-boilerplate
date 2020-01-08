@@ -501,7 +501,7 @@
 		    if ( sub_params ) {
 		        for ( var i in sub_params ) {
 		            var item = sub_params[ i ].split( '=' );
-					
+
 		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
 		        }
 		    }
@@ -530,7 +530,7 @@
 				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
 					urlObj.sub_params_out[ queryvar ].push( queryval );
 				} else {
-					removeUrlParam( e );
+					wpAjax.removeUrlParam( e );
 					return false;
 				}
 			} else {
