@@ -98,8 +98,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -111,8 +111,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -123,8 +123,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -136,8 +136,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="ajax_post_type" data-query_val="page">page</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -150,8 +150,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 
@@ -171,8 +171,8 @@ Equivalent in functionality to "Shortcodes Reference / Testing Interface"
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
         </div>
     </div>
-	<div class="wp-ajax-feed">
-	</div>
+    <div class="wp-ajax-feed">
+    </div>
     <button class="wp-ajax-load">load more</button>
 </div>
 ```
