@@ -369,33 +369,6 @@
 							break;
 
 							case 'post_tag' :
-
-								addTaxQuery = true;
-
-								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
-
-									var taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms,
-										"operator": "AND"
-									});
-
-								}else{
-
-									var taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms,
-										"operator": "AND"
-									});
-
-								}
-
-							break;
-
 							case 'category' :
 
 								addTaxQuery = true;
