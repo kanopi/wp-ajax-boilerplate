@@ -428,7 +428,8 @@
 		},
 
 		/*
-		* HTML Template for Each Row of Data
+		* HTML Template for Each Row of Data.
+		* This is the template appled to each item in our json response from Wp_Ajax_Public::admin_ajax_handler
 		**/
 		buildLoopItem : function(currentSet){
 
@@ -461,12 +462,13 @@
 		buildUrlObject : function(){
 
 			let
-			dest = window.location.origin + window.location.pathname,
-			params = window.location.search.replace( '?', '' ),
+			dest           = window.location.origin + window.location.pathname,
+			params         = window.location.search.replace( '?', '' ),
+			sub_params     = null,
 			sub_params_out = {};
 
 			if ( params.length ) {
-				let sub_params = params.split( '&' );
+				sub_params = params.split( '&' );
 			}
 
 			if ( sub_params ) {
@@ -491,11 +493,11 @@
 			e.preventDefault();
 
 			let
-			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
-			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
-			urlObj = wpAjax.buildUrlObject(),
+			queryvar       = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval       = e.currentTarget.getAttribute( 'data-query_val' ),
+			urlObj         = wpAjax.buildUrlObject(),
 			searchSegments = [],
-			searchString = '?';
+			searchString   = '?';
 
 			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
@@ -528,11 +530,11 @@
 			e.preventDefault();
 
 			let
-			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
-			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
-			urlObj = wpAjax.buildUrlObject(),
+			queryvar       = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval       = e.currentTarget.getAttribute( 'data-query_val' ),
+			urlObj         = wpAjax.buildUrlObject(),
 			searchSegments = [],
-			searchString = '?';
+			searchString   = '?';
 
 			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 
@@ -564,17 +566,18 @@
 
 		/*
 		* Swap URL Param
+		* switch a get-param, no push no pop, just swap
 		**/
 		swapUrlParam : function( e ) {
 
 			e.preventDefault();
 
 			let
-			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
-			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
-			urlObj = wpAjax.buildUrlObject(),
+			queryvar       = e.currentTarget.getAttribute( 'data-query_var' ),
+			queryval       = e.currentTarget.getAttribute( 'data-query_val' ),
+			urlObj         = wpAjax.buildUrlObject(),
 			searchSegments = [],
-			searchString = '?';
+			searchString   = '?';
 
 			urlObj.sub_params_out[ queryvar ] = [ queryval ];
 
@@ -589,49 +592,23 @@
 		},
 
 		/*
-		* Build URL Object
-		**/
-		buildUrlObject : function(){
-
-			let
-			dest = window.location.origin,
-			params = decodeURIComponent( window.location.search.replace( '?', '' ) ),
-			sub_params_out = {};
-			dest += window.location.pathname;
-
-			if ( params.length ) {
-				let sub_params = params.split( '&' );
-			}
-
-			if ( sub_params ) {
-				for ( let i in sub_params ) {
-					let item = sub_params[ i ].split( '=' );
-					sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
-				}
-			}
-
-			return { 'dest': dest, 'sub_params_out': sub_params_out };
-
-		},
-
-		/*
 		* Click Handler for filterOptions
 		**/
 		click_filterOptions : function( e ){
 
 			let parentLoop = e.target.closest('.wp-ajax-wrap'),
-			// button specifics
-			queryvar = e.target.getAttribute( 'data-query_var' ),
-			queryval = e.target.getAttribute( 'data-query_val' );
+			// Button specifics.
+			queryvar       = e.target.getAttribute( 'data-query_var' ),
+			queryval       = e.target.getAttribute( 'data-query_val' );
 
 			if ( parentLoop ) {
 
-				let i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
-				// Local wrapper default settings
-				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
+				let i          = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
+				// Local wrapper default settings.
+				post_type      = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
 				posts_per_page = e.target.closest('.wp-ajax-wrap').getAttribute( 'posts_per_page' ),
-				taxo = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
-				term = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
+				taxo           = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
+				term           = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -793,6 +770,7 @@
 		},
 
 		isEmpty : function(obj) {
+
 			for(var key in obj) {
 				if(obj.hasOwnProperty(key))
 				return false;
