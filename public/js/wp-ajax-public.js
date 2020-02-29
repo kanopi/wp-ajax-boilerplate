@@ -460,11 +460,10 @@
 		**/
 		buildUrlObject : function(){
 
+			let
 			dest = window.location.origin + window.location.pathname,
 			params = window.location.search.replace( '?', '' ),
 			sub_params_out = {};
-
-
 
 			if ( params.length ) {
 				let sub_params = params.split( '&' );
@@ -772,7 +771,6 @@
 				};
 
 				wpAjax.init_ajax( i );
-
 
 			} else {
 
