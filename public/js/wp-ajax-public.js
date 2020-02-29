@@ -1,7 +1,7 @@
 (function( $ ) {
 	'use strict';
 
-	var wpAjax = {
+	let wpAjax = {
 
 		/*
 		* Initial Variables
@@ -22,17 +22,17 @@
 
 			if ( wpAjax.vars.containerWraps.length ) {
 
-				var sub_params 	   = wpAjax.vars.params.split('&'),
-					sub_params_out = {};
+				let sub_params 	   = wpAjax.vars.params.split('&'),
+				sub_params_out = {};
 
 				if ( sub_params ) {
-					for( var i in sub_params ){
-						var item = sub_params[i].split('=');
+					for( let i in sub_params ){
+						let item = sub_params[i].split('=');
 						sub_params_out[ item[0] ] = decodeURIComponent( item[1] );
 					}
 				}
 
-				for ( var i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
+				for ( let i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
 
 					wpAjax.vars.containerWraps[ i ].setAttribute( 'wp-ajax-wrap--index', i ); // consider using attribute rather than css class but remember attributes are local filter/query vars
 
@@ -57,7 +57,7 @@
 		init_terms : function(){
 
 			if ( wpAjax.vars.containerWraps.length ) {
-				for ( var i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
+				for ( let i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
 
 					wpAjax.applyTerms( i );
 
@@ -72,7 +72,7 @@
 		init : function(){
 
 			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
-				for ( var i in wpAjax.vars.loops ) {
+				for ( let i in wpAjax.vars.loops ) {
 
 					wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
 
@@ -147,7 +147,7 @@
 		**/
 		loadMore : function( e ) {
 
-			var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
+			let i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' );
 
 			wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
 
@@ -204,14 +204,13 @@
 
 			wpAjax.vars.loops[i].vars.args["tax_query"] = [];
 
-			var appliedUrlParams = wpAjax.applyUrlParams( i ),
+			let appliedUrlParams = wpAjax.applyUrlParams( i ),
+			taxQueryHolder = [ {"relation": "AND"} ],
 			addTaxQuery = false;
 
 			if ( appliedUrlParams.add_tax_query ) {
-				var taxQueryHolder = appliedUrlParams.tax_query_holder;
+				let taxQueryHolder = appliedUrlParams.tax_query_holder;
 				addTaxQuery = true;
-			} else {
-				taxQueryHolder = [ {"relation": "AND"} ]
 			}
 
 			/*
@@ -219,13 +218,13 @@
 			* todo: consider utility funtion for top-level font-end - wp-query attribute mapping. notice that post_type & posts_per_page follow same path from url-param -> output element data-att -> runtime ux configurability
 			**/
 
-			var local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
+			let local_post_type = wpAjax.vars.containerWraps[ i ].getAttribute( 'post_type' );
 			if ( local_post_type ) {
 
 				if ( -1 !== local_post_type.indexOf( ',' ) ) {
 
 					local_post_type = local_post_type.split(',');
-					for ( var pt in local_post_type ) {
+					for ( let pt in local_post_type ) {
 						if ( wpAjax.vars.loops[i].vars.args['post_type'] ) {
 							if ( -1 === wpAjax.vars.loops[i].vars.args['post_type'].indexOf( pt ) ) {
 								wpAjax.vars.loops[i].vars.args['post_type'].push( pt )
@@ -248,7 +247,7 @@
 				}
 			}
 
-			var local_posts_per_page = wpAjax.vars.containerWraps[ i ].getAttribute( 'posts_per_page' );
+			let local_posts_per_page = wpAjax.vars.containerWraps[ i ].getAttribute( 'posts_per_page' );
 			if ( local_posts_per_page ) {
 
 				wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( local_posts_per_page, 10 );
@@ -257,7 +256,7 @@
 			}
 
 
-			var local_taxo = wpAjax.vars.containerWraps[ i ].getAttribute( 'taxo' ),
+			let local_taxo = wpAjax.vars.containerWraps[ i ].getAttribute( 'taxo' ),
 			local_term = wpAjax.vars.containerWraps[ i ].getAttribute( 'term' ),
 			hasTaxFromUrlParam = false;
 
@@ -271,7 +270,7 @@
 
 				if ( taxQueryHolder.length > 1 ) {
 
-					for ( var rule in taxQueryHolder ) {
+					for ( let rule in taxQueryHolder ) {
 
 						// skip relationship / non taxonomy/term indices
 						if ( ! taxQueryHolder[ rule ].hasOwnProperty( 'taxonomy' ) ) {
@@ -281,7 +280,7 @@
 						} else if ( local_taxo === taxQueryHolder[ rule ][ 'taxonomy' ]  ) {
 
 							hasTaxFromUrlParam = true;
-							for ( var term in local_term ) {
+							for ( let term in local_term ) {
 								if ( -1 === taxQueryHolder[ rule ][ 'terms' ].indexOf( local_term[ term ] ) ) {
 									taxQueryHolder[ rule ][ 'terms' ].push( local_term[ term ] );
 								}
@@ -338,61 +337,61 @@
 		**/
 		applyUrlParams : function ( i ){
 
-			var taxQueryHolder = [ {"relation": "AND"} ],
+			let taxQueryHolder = [ {"relation": "AND"} ],
 			addTaxQuery = false;
 
 			if( wpAjax.vars.params.length ) {
 				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params) ) {
-					for (var index in wpAjax.vars.loops[i].vars.query_params) {
+					for (let index in wpAjax.vars.loops[i].vars.query_params) {
 
 						switch (index) {
 
 							case 'ajax_post_type' :
 
-								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
+							if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
 
-									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+								wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
 
-								} else {
+							} else {
 
-									wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+								wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
 
-								}
+							}
 
 							break;
 
 							case 'ajax_posts_per_page' :
 
-								wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
-								wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+							wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+							wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
 
 							break;
 
 							case 'post_tag' :
 							case 'category' :
 
-								addTaxQuery = true;
+							addTaxQuery = true;
 
-								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
+							if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
 
-									var taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms,
-										"operator": "AND"
-									});
+								let taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+								taxQueryHolder.push({
+									"taxonomy": index,
+									"field": "slug",
+									"terms": taxTerms,
+									"operator": "AND"
+								});
 
-								}else{
+							}else{
 
-									var taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
-									taxQueryHolder.push({
-										"taxonomy": index,
-										"field": "slug",
-										"terms": taxTerms,
-										"operator": "AND"
-									});
-								}
+								let taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+								taxQueryHolder.push({
+									"taxonomy": index,
+									"field": "slug",
+									"terms": taxTerms,
+									"operator": "AND"
+								});
+							}
 
 							// default :
 							// requires is_term && || whitelist of taxo from get_terms cached as transients if not exist
@@ -433,9 +432,9 @@
 		**/
 		buildLoopItem : function(currentSet){
 
-			var returnElement = '';
+			let returnElement = '';
 
-			for (var index in currentSet) {
+			for (let index in currentSet) {
 
 				returnElement += '<div class="teaser teaser--'+currentSet[index]['post_type']+'">';
 				returnElement += '<div class="teaser--content">';
@@ -461,25 +460,25 @@
 		**/
 		buildUrlObject : function(){
 
-		    dest = window.location.origin + window.location.pathname,
-		    params = window.location.search.replace( '?', '' ),
-		    sub_params_out = {};
+			dest = window.location.origin + window.location.pathname,
+			params = window.location.search.replace( '?', '' ),
+			sub_params_out = {};
 
 
 
-		    if ( params.length ) {
-		        var sub_params = params.split( '&' );
-		    }
+			if ( params.length ) {
+				let sub_params = params.split( '&' );
+			}
 
-		    if ( sub_params ) {
-		        for ( var i in sub_params ) {
-		            var item = sub_params[ i ].split( '=' );
+			if ( sub_params ) {
+				for ( let i in sub_params ) {
+					var item = sub_params[ i ].split( '=' );
 
-		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
-		        }
-		    }
+					sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
+				}
+			}
 
-		    return { 'dest': dest, 'sub_params_out': sub_params_out };
+			return { 'dest': dest, 'sub_params_out': sub_params_out };
 
 		},
 
@@ -492,7 +491,7 @@
 
 			e.preventDefault();
 
-			var
+			let
 			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
 			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
 			urlObj = wpAjax.buildUrlObject(),
@@ -510,7 +509,7 @@
 				urlObj.sub_params_out[ queryvar ] = [ queryval ];
 			}
 
-			for ( var item in urlObj.sub_params_out ) {
+			for ( let item in urlObj.sub_params_out ) {
 				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
 			}
 
@@ -529,7 +528,7 @@
 
 			e.preventDefault();
 
-			var
+			let
 			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
 			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
 			urlObj = wpAjax.buildUrlObject(),
@@ -539,7 +538,7 @@
 			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
 
 				if ( urlObj.sub_params_out[ queryvar ].length > 1 ) {
-					for ( var i = urlObj.sub_params_out[ queryvar ].length; i --; ) {
+					for ( let i = urlObj.sub_params_out[ queryvar ].length; i --; ) {
 						if ( urlObj.sub_params_out[ queryvar ][ i ] === queryval ) {
 							urlObj.sub_params_out[ queryvar ].splice( i, 1 );
 						}
@@ -571,7 +570,7 @@
 
 			e.preventDefault();
 
-			var
+			let
 			queryvar = e.currentTarget.getAttribute( 'data-query_var' ),
 			queryval = e.currentTarget.getAttribute( 'data-query_val' ),
 			urlObj = wpAjax.buildUrlObject(),
@@ -580,7 +579,7 @@
 
 			urlObj.sub_params_out[ queryvar ] = [ queryval ];
 
-			for ( var item in urlObj.sub_params_out ) {
+			for ( let item in urlObj.sub_params_out ) {
 				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
 			}
 
@@ -595,24 +594,24 @@
 		**/
 		buildUrlObject : function(){
 
-		    var
+			let
 			dest = window.location.origin,
-		    params = decodeURIComponent( window.location.search.replace( '?', '' ) ),
-		    sub_params_out = {};
-		    dest += window.location.pathname;
+			params = decodeURIComponent( window.location.search.replace( '?', '' ) ),
+			sub_params_out = {};
+			dest += window.location.pathname;
 
-		    if ( params.length ) {
-		        var sub_params = params.split( '&' );
-		    }
+			if ( params.length ) {
+				let sub_params = params.split( '&' );
+			}
 
-		    if ( sub_params ) {
-		        for ( var i in sub_params ) {
-		            var item = sub_params[ i ].split( '=' );
-		            sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
-		        }
-		    }
+			if ( sub_params ) {
+				for ( let i in sub_params ) {
+					let item = sub_params[ i ].split( '=' );
+					sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
+				}
+			}
 
-		    return { 'dest': dest, 'sub_params_out': sub_params_out };
+			return { 'dest': dest, 'sub_params_out': sub_params_out };
 
 		},
 
@@ -621,14 +620,14 @@
 		**/
 		click_filterOptions : function( e ){
 
-			var parentLoop = e.target.closest('.wp-ajax-wrap'),
+			let parentLoop = e.target.closest('.wp-ajax-wrap'),
 			// button specifics
 			queryvar = e.target.getAttribute( 'data-query_var' ),
 			queryval = e.target.getAttribute( 'data-query_val' );
 
 			if ( parentLoop ) {
 
-				var i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
+				let i = e.target.closest('.wp-ajax-wrap').getAttribute( 'wp-ajax-wrap--index' ),
 				// Local wrapper default settings
 				post_type = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
 				posts_per_page = e.target.closest('.wp-ajax-wrap').getAttribute( 'posts_per_page' ),
@@ -645,7 +644,7 @@
 
 				if ( queryvar === 'ajax_post_type' ) {
 
-					var currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || [];
+					let currentRules = wpAjax.vars.loops[i].vars.args['post_type'] || [];
 
 					if ( post_type && -1 === currentRules.indexOf( post_type ) ) {
 						currentRules.push( post_type );
@@ -657,7 +656,7 @@
 
 					} else {
 						if ( currentRules.length ) {
-							for ( var j = currentRules.length; j --; ) {
+							for ( let j = currentRules.length; j --; ) {
 								if ( currentRules[ j ] === queryval ) {
 									currentRules.splice( j, 1 );
 								}
@@ -694,13 +693,13 @@
 							queryval = [ queryval ];
 						}
 
-						var hasTaxFromInit = false;
+						let hasTaxFromInit = false;
 
 						if ( ! wpAjax.vars.loops[i].vars.args['tax_query'] ) {
 							wpAjax.vars.loops[i].vars.args['tax_query'] = [ {"relation": "AND"} ];
 						}
 						if ( wpAjax.vars.loops[i].vars.args['tax_query'].length > 1 ) {
-							for ( var rule in wpAjax.vars.loops[i].vars.args['tax_query'] ) {
+							for ( let rule in wpAjax.vars.loops[i].vars.args['tax_query'] ) {
 
 								if ( ! wpAjax.vars.loops[i].vars.args['tax_query'][ rule ].hasOwnProperty( 'taxonomy' ) ) {
 
@@ -709,7 +708,7 @@
 								} else if ( queryvar === wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'taxonomy' ]  ) {
 
 									hasTaxFromInit = true;
-									for ( var term in queryval ) {
+									for ( let term in queryval ) {
 
 										if ( -1 === wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].indexOf( queryval[ term ] ) ) {
 
@@ -717,14 +716,14 @@
 
 										} else {
 
-											for ( var j = wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length; j --; ) {
+											for ( let j = wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length; j --; ) {
 
 												if ( wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ][ j ] === queryval[ term ] ) {
 
 													wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].splice( j, 1 );
 
 													if ( wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length < 1 ) {
-															delete wpAjax.vars.loops[i].vars.args['tax_query'][ rule ];
+														delete wpAjax.vars.loops[i].vars.args['tax_query'][ rule ];
 													}
 
 												}
@@ -791,7 +790,6 @@
 
 				}
 
-
 			}
 
 		},
@@ -822,11 +820,10 @@
 
 		});
 
-		var filterOptions = document.getElementsByClassName('wp-ajax-filter--option');
-	    for ( var i = 0; i < filterOptions.length; i++ ) {
-	      filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
-	    }
-
+		let filterOptions = document.getElementsByClassName('wp-ajax-filter--option');
+		for ( let i = 0; i < filterOptions.length; i++ ) {
+			filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
+		}
 
 	});
 
