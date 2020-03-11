@@ -348,53 +348,53 @@
 
 							case 'ajax_post_type' :
 
-							if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
+								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
 
-								wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+									wpAjax.vars.loops[i].vars.args['post_type'] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
 
-							} else {
+								} else {
 
-								wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+									wpAjax.vars.loops[i].vars.args['post_type'] = [ wpAjax.vars.loops[i].vars.query_params[index] ];
 
-							}
+								}
 
 							break;
 
 							case 'ajax_posts_per_page' :
 
-							wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
-							wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+								wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+								wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
 
 							break;
 
 							case 'post_tag' :
 							case 'category' :
 
-							addTaxQuery = true;
+								addTaxQuery = true;
 
-							if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
+								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
 
-								let taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
-								taxQueryHolder.push({
-									"taxonomy": index,
-									"field": "slug",
-									"terms": taxTerms,
-									"operator": "AND"
-								});
+									let taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+									taxQueryHolder.push({
+										"taxonomy": index,
+										"field": "slug",
+										"terms": taxTerms,
+										"operator": "AND"
+									});
 
-							}else{
+								}else{
 
-								let taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
-								taxQueryHolder.push({
-									"taxonomy": index,
-									"field": "slug",
-									"terms": taxTerms,
-									"operator": "AND"
-								});
-							}
+									let taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+									taxQueryHolder.push({
+										"taxonomy": index,
+										"field": "slug",
+										"terms": taxTerms,
+										"operator": "AND"
+									});
+								}
 
-							// default :
-							// requires is_term && || whitelist of taxo from get_terms cached as transients if not exist
+								// default :
+								// requires is_term && || whitelist of taxo from get_terms cached as transients if not exist
 
 							break;
 
