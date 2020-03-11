@@ -34,7 +34,7 @@
 
 				for ( let i = 0; i < wpAjax.vars.containerWraps.length; i++ ) {
 
-					wpAjax.vars.containerWraps[ i ].setAttribute( 'wp-ajax-wrap--index', i ); // consider using attribute rather than css class but remember attributes are local filter/query vars
+					wpAjax.vars.containerWraps[ i ].setAttribute( 'wp-ajax-wrap--index', i );
 
 					wpAjax.vars.loops[ i ] = {
 						'vars' : {
@@ -70,7 +70,7 @@
 		* Load initial view / all-projects
 		**/
 		init : function(){
-
+			console.log(111)
 			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
 				for ( let i in wpAjax.vars.loops ) {
 
@@ -252,11 +252,11 @@
 						} else {
 
 							if ( wpAjax.vars.loops[i].vars.args[ queryvar ] ) {
-								if ( -1 === wpAjax.vars.loops[i].vars.args[ queryvar ].indexOf( local_post_type ) ) {
-									wpAjax.vars.loops[i].vars.args[ queryvar ].push( local_post_type )
+								if ( -1 === wpAjax.vars.loops[i].vars.args[ queryvar ].indexOf( queryval ) ) {
+									wpAjax.vars.loops[i].vars.args[ queryvar ].push( queryval )
 								}
 							} else {
-								wpAjax.vars.loops[i].vars.args[ queryvar ] = [ local_post_type ];
+								wpAjax.vars.loops[i].vars.args[ queryvar ] = [ queryval ];
 							}
 						}
 
@@ -377,11 +377,14 @@
 		applyUrlParams : function ( i ){
 
 			let taxQueryHolder = [ {"relation": "AND"} ],
-			addTaxQuery = false;
+				addTaxQuery    = false,
+				noprefix_index = null;
 
 			if( wpAjax.vars.params.length ) {
 				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params) ) {
 					for (let index in wpAjax.vars.loops[i].vars.query_params) {
+
+						noprefix_index = index.replace('ajax_');
 
 						switch (index) {
 
@@ -402,8 +405,6 @@
 							case 'ajax_post__in' :
 							case 'ajax_post__not_in' :
 
-								let noprefix_index = index.replace('ajax_');
-
 								if ( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ) {
 
 									wpAjax.vars.loops[i].vars.args[ noprefix_index ] = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
@@ -422,8 +423,6 @@
 							case 'ajax_page_id' :
 							case 'ajax_post_parent' :
 
-								let noprefix_index = index.replace('ajax_');
-
 								wpAjax.vars.loops[i].vars.args[ noprefix_index ] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
 
 							break;
@@ -435,10 +434,11 @@
 
 							break;
 
-							case 'post_tag' :
-							case 'category' :
+							case 'ajax_post_tag' :
+							case 'ajax_category' :
 
 								addTaxQuery = true;
+								noprefix_index = index.replace('ajax_');
 
 								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
 

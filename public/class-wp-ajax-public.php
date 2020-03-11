@@ -184,33 +184,20 @@ class Wp_Ajax_Public {
 	 */
 	function ajax_shortcode( $props, $content = null ) {
 
-		$props = shortcode_atts( [ 'post_type' => false, 'posts_per_page' => false, 'taxo' => false, 'term' => false, ], $props, 'ajax' );
+		$props = shortcode_atts( [ 'query_var' => false, 'query_val' => false, ], $props, 'ajax' );
 		$attrs = [ 'class' => 'wp-ajax-wrap' ];
 
-		if ( ! empty( $props['post_type'] ) ) :
-			$attrs[ 'post_type' ] = $props['post_type'];
+		if ( ! empty( $props['query_var'] ) ) :
+			$attrs[ 'query_var' ] = $props['query_var'];
 		endif;
-		if ( ! empty( $props['posts_per_page'] ) ) :
-			$attrs[ 'posts_per_page' ] = $props['posts_per_page'];
+		if ( ! empty( $props['query_val'] ) ) :
+			$attrs[ 'query_val' ] = $props['query_val'];
 		endif;
-		if ( ! empty( $props['taxo'] ) ) :
-			$attrs[ 'taxo' ] = $props['taxo'];
-		endif;
-		if ( ! empty( $props['term'] ) ) :
-			$attrs[ 'term' ] = $props['term'];
-		endif;
-		// if ( ! empty( $props['taxo'] ) && ! empty( $props['term'] ) ) :
-		// 	$attrs[ $props['taxo'] ] = $props['term'];
-		// endif;
 
 		ob_start();
 		// output attributes on wrapper, need nicer way to do this.
-		if ( ! empty( $attrs ) ) :
-			echo '<div';
-			foreach ( $attrs as $att => $val ) :
-				echo ' ' . esc_html( $att ) . '="' . esc_attr( $val ) . '"';
-			endforeach;
-			echo '>';
+		if ( ! empty( $attrs[ 'query_var' ] ) && ! empty( $attrs[ 'query_val' ] ) ) :
+			echo '<div class="wp-ajax-wrap" data-query_var="' . $attrs[ 'query_var' ] . '" data-query_val="' . $attrs[ 'query_val' ] . '">';
 		else :
 			echo '<div>';
 		endif;
