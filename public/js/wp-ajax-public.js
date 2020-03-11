@@ -70,7 +70,7 @@
 		* Load initial view / all-projects
 		**/
 		init : function(){
-			console.log(111)
+
 			if ( ! wpAjax.isEmpty( wpAjax.vars.loops ) ) {
 				for ( let i in wpAjax.vars.loops ) {
 
@@ -112,7 +112,8 @@
 				success : function( data ){
 
 					if( data ) {
-
+						console.log('wpAjax.vars.loops[i].vars.data',wpAjax.vars.loops[i].vars.data)
+						console.log('data',data)
 						if( data.info.found_posts > 0 ) {
 
 							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
@@ -209,7 +210,7 @@
 			addTaxQuery = false;
 
 			if ( appliedUrlParams.add_tax_query ) {
-				let taxQueryHolder = appliedUrlParams.tax_query_holder;
+				taxQueryHolder = appliedUrlParams.tax_query_holder;
 				addTaxQuery = true;
 			}
 
@@ -350,22 +351,24 @@
 
 						}
 
-						if( addTaxQuery ){
-							wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
-
-						}else{
-							if(wpAjax.vars.loops[i].vars.args["tax_query"]){
-								delete wpAjax.vars.loops[i].vars.args["tax_query"];
-							}
-						}
-
-						wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
 
 					break;
 
 				}
 			}
 
+
+			if ( addTaxQuery ){
+				wpAjax.vars.loops[i].vars.args["tax_query"] = taxQueryHolder;
+
+			} else {
+				if ( wpAjax.vars.loops[i].vars.args["tax_query"] ){
+					delete wpAjax.vars.loops[i].vars.args["tax_query"];
+				}
+			}
+
+			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
+			console.log('22 wpAjax.vars.loops[i].vars.query',wpAjax.vars.loops[i].vars.query)
 
 		},
 
@@ -384,7 +387,9 @@
 				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params) ) {
 					for (let index in wpAjax.vars.loops[i].vars.query_params) {
 
-						noprefix_index = index.replace('ajax_');
+						noprefix_index = index.replace('ajax_', '');
+						console.log('index',index)
+						console.log('noprefix_index',noprefix_index)
 
 						switch (index) {
 
@@ -436,27 +441,24 @@
 
 							case 'ajax_post_tag' :
 							case 'ajax_category' :
-
+								console.log(99)
 								addTaxQuery = true;
-								noprefix_index = index.replace('ajax_');
 
 								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
-
-									let taxTerms = wpAjax.vars.loops[i].vars.query_params[index].split( ',' );
+									console.log(101)
 									taxQueryHolder.push({
-										"taxonomy": index,
+										"taxonomy": noprefix_index,
 										"field": "slug",
-										"terms": taxTerms,
+										"terms": wpAjax.vars.loops[i].vars.query_params[index].split( ',' ),
 										"operator": "AND"
 									});
 
 								}else{
-
-									let taxTerms = [ wpAjax.vars.loops[i].vars.query_params[index] ];
+									console.log(102)
 									taxQueryHolder.push({
-										"taxonomy": index,
+										"taxonomy": noprefix_index,
 										"field": "slug",
-										"terms": taxTerms,
+										"terms": [ wpAjax.vars.loops[i].vars.query_params[index] ],
 										"operator": "AND"
 									});
 								}
