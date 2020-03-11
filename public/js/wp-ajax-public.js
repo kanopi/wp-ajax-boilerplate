@@ -262,11 +262,11 @@
 
 					break;
 
-					case 'ajax_cat' :
-					case 'ajax_tag_id' :
-					case 'ajax_p' :
-					case 'ajax_page_id' :
-					case 'ajax_post_parent' :
+					case 'cat' :
+					case 'tag_id' :
+					case 'p' :
+					case 'page_id' :
+					case 'post_parent' :
 
 						if ( queryvar ) {
 
@@ -567,15 +567,15 @@
 			searchSegments = [],
 			searchString   = '?';
 
-			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
-				if ( urlObj.sub_params_out[ queryvar ].indexOf( queryval ) === - 1 ) {
-					urlObj.sub_params_out[ queryvar ].push( queryval );
+			if ( urlObj.sub_params_out.hasOwnProperty( 'ajax_' + queryvar ) ) {
+				if ( urlObj.sub_params_out[ 'ajax_' + queryvar ].indexOf( queryval ) === - 1 ) {
+					urlObj.sub_params_out[ 'ajax_' + queryvar ].push( queryval );
 				} else {
 					wpAjax.removeUrlParam( e );
 					return false;
 				}
 			} else {
-				urlObj.sub_params_out[ queryvar ] = [ queryval ];
+				urlObj.sub_params_out[ 'ajax_' + queryvar ] = [ queryval ];
 			}
 
 			for ( let item in urlObj.sub_params_out ) {
@@ -604,19 +604,19 @@
 			searchSegments = [],
 			searchString   = '?';
 
-			if ( urlObj.sub_params_out.hasOwnProperty( queryvar ) ) {
+			if ( urlObj.sub_params_out.hasOwnProperty( 'ajax_' + queryvar ) ) {
 
-				if ( urlObj.sub_params_out[ queryvar ].length > 1 ) {
-					for ( let i = urlObj.sub_params_out[ queryvar ].length; i --; ) {
-						if ( urlObj.sub_params_out[ queryvar ][ i ] === queryval ) {
-							urlObj.sub_params_out[ queryvar ].splice( i, 1 );
+				if ( urlObj.sub_params_out[ 'ajax_' + queryvar ].length > 1 ) {
+					for ( let i = urlObj.sub_params_out[ 'ajax_' + queryvar ].length; i --; ) {
+						if ( urlObj.sub_params_out[ 'ajax_' + queryvar ][ i ] === queryval ) {
+							urlObj.sub_params_out[ 'ajax_' + queryvar ].splice( i, 1 );
 						}
-						if ( ! urlObj.sub_params_out[ queryvar ].length ) {
-							delete urlObj.sub_params_out[ queryvar ];
+						if ( ! urlObj.sub_params_out[ 'ajax_' + queryvar ].length ) {
+							delete urlObj.sub_params_out[ 'ajax_' + queryvar ];
 						}
 					}
-				} else if ( urlObj.sub_params_out[ queryvar ].length === 1 ) {
-					delete urlObj.sub_params_out[ queryvar ];
+				} else if ( urlObj.sub_params_out[ 'ajax_' + queryvar ].length === 1 ) {
+					delete urlObj.sub_params_out[ 'ajax_' + queryvar ];
 				}
 
 			} else {
@@ -647,7 +647,7 @@
 			searchSegments = [],
 			searchString   = '?';
 
-			urlObj.sub_params_out[ queryvar ] = [ queryval ];
+			urlObj.sub_params_out[ 'ajax_' + queryvar ] = [ queryval ];
 
 			for ( let item in urlObj.sub_params_out ) {
 				searchSegments.push( item + '=' + urlObj.sub_params_out[ item ].join( ',' ) );
