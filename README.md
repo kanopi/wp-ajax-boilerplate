@@ -19,9 +19,21 @@ A collection of tools for interfacing with wp-query asynchronously.
 <div class="wp-ajax-wrap" post_type="post">
     <div class="wp-ajax-feed">
     </div>
-    <button class="wp-ajax-load">load more</button>
+    <button class="wpqjx-load">load more</button>
 </div>
 ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 #### Output can be filtered
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
