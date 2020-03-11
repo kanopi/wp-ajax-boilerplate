@@ -368,7 +368,6 @@
 			}
 
 			wpAjax.vars.loops[i].vars.query = JSON.stringify(wpAjax.vars.loops[i].vars.args);
-			console.log('22 wpAjax.vars.loops[i].vars.query',wpAjax.vars.loops[i].vars.query)
 
 		},
 
@@ -388,8 +387,6 @@
 					for (let index in wpAjax.vars.loops[i].vars.query_params) {
 
 						noprefix_index = index.replace('ajax_', '');
-						console.log('index',index)
-						console.log('noprefix_index',noprefix_index)
 
 						switch (index) {
 
@@ -441,11 +438,11 @@
 
 							case 'ajax_post_tag' :
 							case 'ajax_category' :
-								console.log(99)
+
 								addTaxQuery = true;
 
 								if( -1 !== wpAjax.vars.loops[i].vars.query_params[index].indexOf( ',' ) ){
-									console.log(101)
+
 									taxQueryHolder.push({
 										"taxonomy": noprefix_index,
 										"field": "slug",
@@ -454,7 +451,7 @@
 									});
 
 								}else{
-									console.log(102)
+
 									taxQueryHolder.push({
 										"taxonomy": noprefix_index,
 										"field": "slug",
@@ -677,11 +674,7 @@
 				// Local wrapper default settings.
 				//
 				parent_queryvar = e.target.closest('.wp-ajax-wrap').getAttribute( 'data-query_var' ),
-				parent_queryval = e.target.closest('.wp-ajax-wrap').getAttribute( 'data-query_val' ),
-				// post_type       = e.target.closest('.wp-ajax-wrap').getAttribute( 'post_type' ),
-				// posts_per_page  = e.target.closest('.wp-ajax-wrap').getAttribute( 'posts_per_page' ),
-				taxo            = e.target.closest('.wp-ajax-wrap').getAttribute( 'taxo' ),
-				term            = e.target.closest('.wp-ajax-wrap').getAttribute( 'term' );
+				parent_queryval = e.target.closest('.wp-ajax-wrap').getAttribute( 'data-query_val' );
 
 				if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
 					e.target.classList.remove( 'wp-ajax-filter--option-active' );
@@ -692,8 +685,8 @@
 				}
 
 
-				if ( parent_queryvar ) {
-					switch ( parent_queryvar ) {
+				if ( queryvar ) {
+					switch ( queryvar ) {
 
 						case 'post_type' :
 						case 'post_status' :
@@ -841,6 +834,7 @@
 
 				wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
 
+				console.log('wpAjax.vars.loops[i].vars.data',wpAjax.vars.loops[i].vars.data);
 				wpAjax.vars.loops[i].vars.data = {
 					'action' : wpAjax.vars.dataAction,
 					'query': wpAjax.vars.loops[i].vars.query,
