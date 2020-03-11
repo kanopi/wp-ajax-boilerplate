@@ -83,7 +83,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 </div>
 
 <p>taxo & term attributes adds default tax-query</p>
-<div class="wp-ajax-wrap" taxo="post_tag" term="lorem">
+<div class="wp-ajax-wrap" data-query_var="post_tag" data-query_val="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
@@ -96,7 +96,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 </div>
 
 <p>.wp-ajax-filter inside .wp-ajax-wrap, local tax_query control</p>
-<div class="wp-ajax-wrap" taxo="post_tag">
+<div class="wp-ajax-wrap" data-query_var="post_tag" data-query_val="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="post_tag" data-query_val="lorem">lorem</button>
@@ -110,7 +110,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 </div>
 
 <p>multiple .wp-ajax-filter inside .wp-ajax-wrap compliment each other</p>
-<div class="wp-ajax-wrap" taxo="post_tag">
+<div class="wp-ajax-wrap" data-query_var="post_tag" data-query_val="lorem">
     <div class="wp-ajax-filter--wrap">
         <div class="wp-ajax-filter">
             <button class="wp-ajax-filter--option wp-ajax-filter--option-inactive" data-query_var="category" data-query_val="animals">animals</button>
