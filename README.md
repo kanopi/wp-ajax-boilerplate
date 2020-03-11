@@ -159,11 +159,10 @@ A collection of tools for interfacing with wp-query asynchronously.
 - p (Integer)
 - page_id (Integer)
 - post_parent (Integer)
+- posts_per_page (Integer)
 
-- posts_per_page (WIP, currently applying both posts_per_page & limit)
-
-- post_tag ( Array, via: tax_query )
-- category ( Array, via: tax_query )
+- post_tag ( Array, tax_query )
+- category ( Array, tax_query )
 
 
 ## Shortcodes

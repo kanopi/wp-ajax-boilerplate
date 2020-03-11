@@ -112,8 +112,7 @@
 				success : function( data ){
 
 					if( data ) {
-						console.log('wpAjax.vars.loops[i].vars.data',wpAjax.vars.loops[i].vars.data)
-						console.log('data',data)
+
 						if( data.info.found_posts > 0 ) {
 
 							wpAjax.vars.loops[i].vars.foundPosts = data.info.found_posts;
@@ -166,7 +165,7 @@
 				type : 'POST',
 				dataType: 'json',
 				beforeSend : function ( xhr ) {
-					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ... ';
+					wpAjax.vars.containerWraps[i].getElementsByClassName( wpAjax.vars.button )[0].innerHTML = 'loading ...';
 				},
 				success : function( data ){
 					if( data ) {
@@ -268,21 +267,11 @@
 					case 'p' :
 					case 'page_id' :
 					case 'post_parent' :
+					case 'posts_per_page' :
 
 						if ( queryvar ) {
 
 							wpAjax.vars.loops[i].vars.args[ queryvar ] = parseInt( queryval, 10 );
-
-						}
-
-					break;
-
-					case 'posts_per_page' :
-
-						if ( queryval ) {
-
-							wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( queryval, 10 );
-							wpAjax.vars.loops[i].vars.args['limit'] = parseInt( queryval, 10 );
 
 						}
 
@@ -350,7 +339,6 @@
 							}
 
 						}
-
 
 					break;
 
@@ -424,15 +412,9 @@
 							case 'ajax_p' :
 							case 'ajax_page_id' :
 							case 'ajax_post_parent' :
-
-								wpAjax.vars.loops[i].vars.args[ noprefix_index ] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
-
-							break;
-
 							case 'ajax_posts_per_page' :
 
-								wpAjax.vars.loops[i].vars.args['posts_per_page'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
-								wpAjax.vars.loops[i].vars.args['limit'] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
+								wpAjax.vars.loops[i].vars.args[ noprefix_index ] = parseInt( wpAjax.vars.loops[i].vars.query_params[index], 10 );
 
 							break;
 
@@ -765,7 +747,9 @@
 							if ( ! wpAjax.vars.loops[i].vars.args['tax_query'] ) {
 								wpAjax.vars.loops[i].vars.args['tax_query'] = [ {"relation": "AND"} ];
 							}
+
 							if ( wpAjax.vars.loops[i].vars.args['tax_query'].length > 1 ) {
+
 								for ( let rule in wpAjax.vars.loops[i].vars.args['tax_query'] ) {
 
 									if ( ! wpAjax.vars.loops[i].vars.args['tax_query'][ rule ].hasOwnProperty( 'taxonomy' ) ) {
@@ -834,7 +818,6 @@
 
 				wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
 
-				console.log('wpAjax.vars.loops[i].vars.data',wpAjax.vars.loops[i].vars.data);
 				wpAjax.vars.loops[i].vars.data = {
 					'action' : wpAjax.vars.dataAction,
 					'query': wpAjax.vars.loops[i].vars.query,
@@ -845,17 +828,24 @@
 
 			} else {
 
-				if ( 'ajax_posts_per_page' === queryvar ) {
+				switch ( queryvar ) {
+					case 'ajax_cat' :
+					case 'ajax_tag_id' :
+					case 'ajax_p' :
+					case 'ajax_page_id' :
+					case 'ajax_post_parent' :
+					case 'posts_per_page' :
 
-					wpAjax.swapUrlParam( e );
+						wpAjax.swapUrlParam( e );
+						break;
 
-				} else {
+					default:
 
-					if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
-						wpAjax.removeUrlParam( e );
-					} else {
-						wpAjax.addUrlParam( e );
-					}
+						if ( e.target.classList.contains( 'wp-ajax-filter--option-active' ) ) {
+							wpAjax.removeUrlParam( e );
+						} else {
+							wpAjax.addUrlParam( e );
+						}
 
 				}
 
