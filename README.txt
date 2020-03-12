@@ -147,22 +147,22 @@ A collection of tools for interfacing with wp-query asynchronously.
    1. As a data-attribute on the parent `.wpqjx-wrap[data-query_var][data-query_val]`
    1. Lastly at runtime via the filters interface , `.wpqjx-filter .wpqjx-filter--option[data-query_var][data-query_val]` * note that these filter locally when inside of a `.wpqjx-wrap` parent element and apply & remove get-params when placed outside
 
-- post_type (Array)
-- post_status (Array)
-- author__in (Array)
-- author__not_in (Array)
-- category__and (Array)
-- category__in (Array)
-- category__not_in (Array)
-- tag__and (Array)
-- tag__in (Array)
-- tag__not_in (Array)
-- tag_slug__and (Array)
-- tag_slug__in (Array)
-- post_parent__in (Array)
-- post_parent__not_in (Array)
-- post__in (Array)
-- post__not_in (Array)
+- post_type (Array, post_type strings)
+- post_status (Array, post_status strings)
+- author__in (Array, author ids)
+- author__not_in (Array, author ids)
+- category__and (Array, category ids)
+- category__in (Array, category ids)
+- category__not_in (Array, category ids)
+- tag__and (Array, tag ids)
+- tag__in (Array, tag ids)
+- tag__not_in (Array, tag ids)
+- tag_slug__and (Array, slugs)
+- tag_slug__in (Array, slugs)
+- post_parent__in (Array, post ids)
+- post_parent__not_in (Array, post ids)
+- post__in (Array, post ids)
+- post__not_in (Array, post ids)
 
 - cat (Integer)
 - tag_id (Integer)
@@ -204,14 +204,29 @@ If we wanted to output pages by default & still have local filters, we could use
 ### Shortcodes Reference / Testing Interface
 ```
 [wpqjx_filter query_var="post_type" query_val="post,page"]
-[wpqjx post_type="page"][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]
-[wpqjx post_type="post"][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]
+
+[wpqjx query_var="post_type" query_val="page"]
+  [wpqjx_filter query_var="post_type" query_val="post,page"]
+[/wpqjx]
+
+[wpqjx query_var="post_type" query_val="post"]
+  [wpqjx_filter query_var="post_type" query_val="post,page"]
+[/wpqjx]
+
 [wpqjx][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]
-[wpqjx_filter taxo="category" query_val="lorem,ipsum,set"]
-[wpqjx_filter taxo="post_tag" query_val="lorem,ipsum,set"]
-[wpqjx taxo="post_tag" query_val="lorem,ipsum,set"][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]
-[wpqjx taxo="post_tag" query_val="lorem,ipsum,set"][wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"][/wpqjx]
-[wpqjx taxo="post_tag" query_val="lorem,ipsum"]
+
+[wpqjx_filter query_var="category" query_val="lorem,ipsum,set"]
+[wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
+
+[wpqjx query_var="post_tag" query_val="lorem,ipsum,set"]
+  [wpqjx_filter query_var="post_type" query_val="post,page"]
+[/wpqjx]
+
+[wpqjx query_var="post_tag" query_val="lorem,ipsum,set"]
+  [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
+[/wpqjx]
+
+[wpqjx query_var="post_tag" query_val="lorem,ipsum"]
     [wpqjx_filter query_var="category" query_val="animals,cats,dogs"]
     [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
 [/wpqjx]
