@@ -56,12 +56,8 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 <p>.wpqjx-filter inside .wpqjx-wrap will modify query within parent .wpqjx-wrap &  post_type="" or posts_per_page="" wrapper-attributes pre-define filtering within global-scope & above runtime filters</p>
 <div class="wpqjx-wrap" post_type="page">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
@@ -69,24 +65,16 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 <p>post_type attribute adds default local filters</p>
 <div class="wpqjx-wrap" post_type="post">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
 </div>
 
 <div class="wpqjx-wrap">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
@@ -94,12 +82,8 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 <p>taxo & term attributes adds default tax-query</p>
 <div class="wpqjx-wrap" data-query_var="post_tag" data-query_val="lorem">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="post">post</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_type" data-query_val="page">page</button>
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
@@ -107,13 +91,9 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 <p>.wpqjx-filter inside .wpqjx-wrap, local tax_query control</p>
 <div class="wpqjx-wrap" data-query_var="post_tag" data-query_val="lorem">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="lorem">lorem</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="ipsum">ipsum</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="lorem">lorem</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="ipsum">ipsum</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="set">set</button>
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
@@ -121,13 +101,9 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 <p>multiple .wpqjx-filter inside .wpqjx-wrap compliment each other</p>
 <div class="wpqjx-wrap" data-query_var="post_tag" data-query_val="lorem">
-    <div class="wpqjx-filter--wrap">
-        <div class="wpqjx-filter">
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="animals">animals</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="cats">cats</button>
-            <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="dogs">dogs</button>
-        </div>
-    </div>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="animals">animals</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="cats">cats</button>
+	<button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="category" data-query_val="dogs">dogs</button>
     <div class="wpqjx-filter--wrap">
         <div class="wpqjx-filter">
             <button class="wpqjx-filter--option wpqjx-filter--option-inactive" data-query_var="post_tag" data-query_val="lorem">lorem</button>
