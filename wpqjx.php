@@ -14,7 +14,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       WPQJX
- * Plugin URI:        https://kanopistudios.com
+ * Plugin URI:        https://github.com/kanopi/wpqjx
  * Description:       WP Query javaScript & XML ( wpqjx / wp-ajax-boilerplate ) plugin for working with wp-query asynchronously
  * Version:           1.0.0
  * Author:            Adam McFadyen
