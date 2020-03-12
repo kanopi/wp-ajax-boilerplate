@@ -37,12 +37,8 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 ```
 <p>.wpqjx-filter outside of .wpqjx-wrap will modify global get-params & cause page refresh</p>
-<div class="wpqjx-filter--wrap">
-    <div class="wpqjx-filter">
-        <button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
-        <button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
-    </div>
-</div>
+<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
+<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 
 <p>.wpqjx-filter inside .wpqjx-wrap will modify query within parent .wpqjx-wrap &  post_type="" or posts_per_page="" wrapper-attributes pre-define filtering within global-scope & above runtime filters</p>
 <div class="wpqjx-wrap" post_type="page">
