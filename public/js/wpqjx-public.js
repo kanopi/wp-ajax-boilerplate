@@ -687,6 +687,7 @@
 						case 'post__in' :
 						case 'post__not_in' :
 
+
 							let currentRules = wpAjax.vars.loops[i].vars.args[ queryvar ] || [];
 
 							if ( parent_queryvar && -1 === currentRules.indexOf( parent_queryvar ) ) {
@@ -709,7 +710,7 @@
 
 							if ( currentRules.length ) {
 
-								wpAjax.vars.loops[i].vars.args[ parent_queryvar ] = currentRules;
+								wpAjax.vars.loops[i].vars.args[ queryvar ] = currentRules;
 
 							} else {
 
