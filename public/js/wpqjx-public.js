@@ -658,12 +658,12 @@
 				parent_queryvar = e.target.closest('.wpqjx-wrap').getAttribute( 'data-query_var' ),
 				parent_queryval = e.target.closest('.wpqjx-wrap').getAttribute( 'data-query_val' );
 
-				if ( e.target.classList.contains( 'wpqjx-filter--option-active' ) ) {
-					e.target.classList.remove( 'wpqjx-filter--option-active' );
-					e.target.classList.add( 'wpqjx-filter--option-inactive' );
+				if ( e.target.classList.contains( 'wpqjx-filter--active' ) ) {
+					e.target.classList.remove( 'wpqjx-filter--active' );
+					e.target.classList.add( 'wpqjx-filter--inactive' );
 				} else {
-					e.target.classList.remove( 'wpqjx-filter--option-inactive' );
-					e.target.classList.add( 'wpqjx-filter--option-active' );
+					e.target.classList.remove( 'wpqjx-filter--inactive' );
+					e.target.classList.add( 'wpqjx-filter--active' );
 				}
 
 
@@ -841,7 +841,7 @@
 
 					default:
 
-						if ( e.target.classList.contains( 'wpqjx-filter--option-active' ) ) {
+						if ( e.target.classList.contains( 'wpqjx-filter--active' ) ) {
 							wpAjax.removeUrlParam( e );
 						} else {
 							wpAjax.addUrlParam( e );
@@ -880,7 +880,7 @@
 
 		});
 
-		let filterOptions = document.getElementsByClassName('wpqjx-filter--option');
+		let filterOptions = document.getElementsByClassName('wpqjx-filter');
 		for ( let i = 0; i < filterOptions.length; i++ ) {
 			filterOptions[i].addEventListener('click', wpAjax.click_filterOptions, false);
 		}

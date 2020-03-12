@@ -259,13 +259,13 @@ class Wpqjx_Public {
 
 				if ( 'select' === $props['ux'] ) {
 
-					$output .= '<select class="wpqjx-filter">';
+					$output .= '<select class="wpqjx-filter-list">';
 					foreach (  $query_args_list as $query_arg ) {
-						$classes =  [ 'wpqjx-filter--option' ];
+						$classes =  [ 'wpqjx-filter' ];
 						if( in_array( $query_arg, $active_terms ) ){
-							$classes[] = 'wpqjx-filter--option-active';
+							$classes[] = 'wpqjx-filter--active';
 						} else {
-							$classes[] = 'wpqjx-filter--option-inactive';
+							$classes[] = 'wpqjx-filter--inactive';
 						}
 						$output .= '<option class="' . esc_attr( implode( ' ', $classes ) ) . '" data-query_var="' . esc_attr( $query_var ) . '" data-query_val="' .$query_arg. '">' .$query_arg. '</option>';
 					}
@@ -273,17 +273,15 @@ class Wpqjx_Public {
 
 				} elseif ( 'buttons' === $props['ux'] ) {
 
-					$output .= '<div class="wpqjx-filter">';
 					foreach (  $query_args_list as $query_arg ) {
-						$classes =  [ 'wpqjx-filter--option' ];
+						$classes =  [ 'wpqjx-filter' ];
 						if( in_array( $query_arg, $active_terms ) ){
-							$classes[] = 'wpqjx-filter--option-active';
+							$classes[] = 'wpqjx-filter--active';
 						} else {
-							$classes[] = 'wpqjx-filter--option-inactive';
+							$classes[] = 'wpqjx-filter--inactive';
 						}
 						$output .= '<button class="' . esc_attr( implode( ' ', $classes ) ) . '" data-query_var="' . esc_attr( $query_var ) . '" data-query_val="' .$query_arg. '">' .$query_arg. '</button>';
 					}
-					$output .= '</div>';
 
 				}
 				//  ( 'pills' === 'ux' ) { }
