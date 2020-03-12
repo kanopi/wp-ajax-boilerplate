@@ -22,7 +22,7 @@
  * @link       https://kanopistudios.com
  * @since      1.0.0
  *
- * @package    Wp_Ajax
+ * @package    Wpqjx
  */
 
 // If uninstall not called from WordPress, then exit.

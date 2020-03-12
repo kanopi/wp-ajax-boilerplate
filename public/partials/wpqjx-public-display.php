@@ -8,8 +8,8 @@
  * @link       https://kanopistudios.com
  * @since      1.0.0
  *
- * @package    Wp_Ajax
- * @subpackage Wp_Ajax/public/partials
+ * @package    Wpqjx
+ * @subpackage Wpqjx/public/partials
  */
 ?>
 

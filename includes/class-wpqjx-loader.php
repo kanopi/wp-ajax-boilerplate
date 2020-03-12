@@ -6,8 +6,8 @@
  * @link       https://kanopistudios.com
  * @since      1.0.0
  *
- * @package    Wp_Ajax
- * @subpackage Wp_Ajax/includes
+ * @package    Wpqjx
+ * @subpackage Wpqjx/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Wp_Ajax
- * @subpackage Wp_Ajax/includes
- * @author     Adam McFadyen & Damon Sharp <hello@kanopistudios.com>
+ * @package    Wpqjx
+ * @subpackage Wpqjx/includes
+ * @author     Adam McFadyen <support@kanopistudios.com>
  */
-class Wp_Ajax_Loader {
+class Wpqjx_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.
