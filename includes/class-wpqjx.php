@@ -9,8 +9,8 @@
  * @link       https://kanopistudios.com
  * @since      1.0.0
  *
- * @package    Wp_Ajax
- * @subpackage Wp_Ajax/includes
+ * @package    Wpqjx
+ * @subpackage Wpqjx/includes
  */
 
 /**
@@ -23,11 +23,11 @@
  * version of the plugin.
  *
  * @since      1.0.0
- * @package    Wp_Ajax
- * @subpackage Wp_Ajax/includes
- * @author     Adam McFadyen & Damon Sharp <hello@kanopistudios.com>
+ * @package    Wpqjx
+ * @subpackage Wpqjx/includes
+ * @author     Adam McFadyen <support@kanopistudios.com>
  */
-class Wp_Ajax {
+class Wpqjx {
 
 	/**
 	 * The loader that's responsible for maintaining and registering all hooks that power
@@ -35,7 +35,7 @@ class Wp_Ajax {
 	 *
 	 * @since    1.0.0
 	 * @access   protected
-	 * @var      Wp_Ajax_Loader    $loader    Maintains and registers all hooks for the plugin.
+	 * @var      Wpqjx_Loader    $loader    Maintains and registers all hooks for the plugin.
 	 */
 	protected $loader;
 
@@ -67,12 +67,12 @@ class Wp_Ajax {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'WP_AJAX_VERSION' ) ) {
-			$this->version = WP_AJAX_VERSION;
+		if ( defined( 'WPQJX_VERSION' ) ) {
+			$this->version = WPQJX_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'wp-ajax';
+		$this->plugin_name = 'wpqjx';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -86,10 +86,10 @@ class Wp_Ajax {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - Wp_Ajax_Loader. Orchestrates the hooks of the plugin.
-	 * - Wp_Ajax_i18n. Defines internationalization functionality.
-	 * - Wp_Ajax_Admin. Defines all hooks for the admin area.
-	 * - Wp_Ajax_Public. Defines all hooks for the public side of the site.
+	 * - Wpqjx_Loader. Orchestrates the hooks of the plugin.
+	 * - Wpqjx_i18n. Defines internationalization functionality.
+	 * - Wpqjx_Admin. Defines all hooks for the admin area.
+	 * - Wpqjx_Public. Defines all hooks for the public side of the site.
 	 *
 	 * Create an instance of the loader which will be used to register the hooks
 	 * with WordPress.
@@ -103,33 +103,33 @@ class Wp_Ajax {
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-ajax-loader.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpqjx-loader.php';
 
 		/**
 		 * The class responsible for defining internationalization functionality
 		 * of the plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wp-ajax-i18n.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpqjx-i18n.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wp-ajax-admin.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wpqjx-admin.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wp-ajax-public.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-wpqjx-public.php';
 
-		$this->loader = new Wp_Ajax_Loader();
+		$this->loader = new Wpqjx_Loader();
 
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
 	 *
-	 * Uses the Wp_Ajax_i18n class in order to set the domain and to register the hook
+	 * Uses the Wpqjx_i18n class in order to set the domain and to register the hook
 	 * with WordPress.
 	 *
 	 * @since    1.0.0
@@ -137,7 +137,7 @@ class Wp_Ajax {
 	 */
 	private function set_locale() {
 
-		$plugin_i18n = new Wp_Ajax_i18n();
+		$plugin_i18n = new Wpqjx_i18n();
 
 		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
 
@@ -152,8 +152,8 @@ class Wp_Ajax {
 	 */
 	private function define_admin_hooks() {
 
-		$plugin_admin = new Wp_Ajax_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_public = new Wp_Ajax_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_admin = new Wpqjx_Admin( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Wpqjx_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
@@ -171,15 +171,15 @@ class Wp_Ajax {
 	 */
 	private function define_public_hooks() {
 
-		$plugin_public = new Wp_Ajax_Public( $this->get_plugin_name(), $this->get_version() );
+		$plugin_public = new Wpqjx_Public( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		$this->loader->add_action( 'wp_ajax_nopriv_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
 
-		$this->loader->add_action( 'init', $plugin_public, 'add_ajax_shortcode' );
-		$this->loader->add_action( 'init', $plugin_public, 'add_ajax_filter_shortcode' );
+		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_shortcode' );
+		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_filter_shortcode' );
 
 		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'taxosearch_groupby' );
 
@@ -209,7 +209,7 @@ class Wp_Ajax {
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since     1.0.0
-	 * @return    Wp_Ajax_Loader    Orchestrates the hooks of the plugin.
+	 * @return    Wpqjx_Loader    Orchestrates the hooks of the plugin.
 	 */
 	public function get_loader() {
 		return $this->loader;
