@@ -33,6 +33,40 @@ A collection of tools for interfacing with wp-query asynchronously.
 1. Sumup: get params set global browser filter, element-attributes refine filters on a per-loop basis, & ux-interface can be used to filter within loops & at a global-level, depending if they're wrapped in a loop-container
 
 
+## [WP_Query Parameters](https://developer.wordpress.org/reference/classes/wp_query/#taxonomy-parameters) Currently Supported
+> The following WP_Query params can be applied to ajax-loop output in 3 ways
+   1. As a get-param with a `ajax_` prefix, ex: `?ajax_post_type=cpt_one,cpt_two`
+   1. As a data-attribute on the parent `.wpqjx-wrap[data-query_var][data-query_val]`
+   1. Lastly at runtime via the filters interface , `.wpqjx-filter .wpqjx-filter[data-query_var][data-query_val]` * note that these filter locally when inside of a `.wpqjx-wrap` parent element and apply & remove get-params when placed outside
+
+- post_type (Array, post_type strings)
+- post_status (Array, post_status strings)
+- author__in (Array, author ids)
+- author__not_in (Array, author ids)
+- category__and (Array, category ids)
+- category__in (Array, category ids)
+- category__not_in (Array, category ids)
+- tag__and (Array, tag ids)
+- tag__in (Array, tag ids)
+- tag__not_in (Array, tag ids)
+- tag_slug__and (Array, slugs)
+- tag_slug__in (Array, slugs)
+- post_parent__in (Array, post ids)
+- post_parent__not_in (Array, post ids)
+- post__in (Array, post ids)
+- post__not_in (Array, post ids)
+
+- cat (Integer)
+- tag_id (Integer)
+- p (Integer)
+- page_id (Integer)
+- post_parent (Integer)
+- posts_per_page (Integer)
+
+- post_tag ( Array, tax_query )
+- category ( Array, tax_query )
+
+
 ## HTML Reference / Testing Interface
 
 ```
@@ -41,7 +75,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 <button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 
 <p>.wpqjx-filter inside .wpqjx-wrap will modify query within parent .wpqjx-wrap &  post_type="" or posts_per_page="" wrapper-attributes pre-define filtering within global-scope & above runtime filters</p>
-<div class="wpqjx-wrap" post_type="page">
+<div class="wpqjx-wrap" data-query_var="post_type" data-query_val="page">
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 	<div class="wpqjx-feed">
@@ -50,7 +84,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 </div>
 
 <p>post_type attribute adds default local filters</p>
-<div class="wpqjx-wrap" post_type="post">
+<div class="wpqjx-wrap"  data-query_var="post_type" data-query_val="post">
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 	<div class="wpqjx-feed">
@@ -102,40 +136,6 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 </div>
 ```
-
-## [WP_Query Parameters](https://developer.wordpress.org/reference/classes/wp_query/#taxonomy-parameters) Currently Supported
-> The following WP_Query params can be applied to ajax-loop output in 3 ways
-   1. As a get-param with a `ajax_` prefix, ex: `?ajax_post_type=cpt_one,cpt_two`
-   1. As a data-attribute on the parent `.wpqjx-wrap[data-query_var][data-query_val]`
-   1. Lastly at runtime via the filters interface , `.wpqjx-filter .wpqjx-filter[data-query_var][data-query_val]` * note that these filter locally when inside of a `.wpqjx-wrap` parent element and apply & remove get-params when placed outside
-
-- post_type (Array, post_type strings)
-- post_status (Array, post_status strings)
-- author__in (Array, author ids)
-- author__not_in (Array, author ids)
-- category__and (Array, category ids)
-- category__in (Array, category ids)
-- category__not_in (Array, category ids)
-- tag__and (Array, tag ids)
-- tag__in (Array, tag ids)
-- tag__not_in (Array, tag ids)
-- tag_slug__and (Array, slugs)
-- tag_slug__in (Array, slugs)
-- post_parent__in (Array, post ids)
-- post_parent__not_in (Array, post ids)
-- post__in (Array, post ids)
-- post__not_in (Array, post ids)
-
-- cat (Integer)
-- tag_id (Integer)
-- p (Integer)
-- page_id (Integer)
-- post_parent (Integer)
-- posts_per_page (Integer)
-
-- post_tag ( Array, tax_query )
-- category ( Array, tax_query )
-
 
 ## Shortcodes
 
