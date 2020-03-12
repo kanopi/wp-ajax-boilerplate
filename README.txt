@@ -1,5 +1,5 @@
 === Plugin Name ===
-Contributors: (this should be a list of wordpress.org userid's)
+Contributors: ajmcfadyen
 Donate link: https://kanopistudios.com
 Tags: ajax, headless, async, wp-query, filter
 Requires at least: 3.0.1
@@ -8,10 +8,11 @@ Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+# WP Query javaScript & XML ( _wpqjx_ / wp-ajax-boilerplate )
 
 A collection of tools for interfacing with wp-query asynchronously.
 
-> Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wp-ajax-boilerplate/blob/master/public/class-wpqjx-public.php).
+> Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wpqjx/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wpqjx/blob/master/public/class-wpqjx-public.php).
 > Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
 
 ## Setup
@@ -34,7 +35,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 
 #### Output can be filtered
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
-   - `?ajax_post_type=post&ajax_post_tag=foo` would output posts with the tag "foo".
+   - `?wpqjx_post_type=post&wpqjx_post_tag=foo` would output posts with the tag "foo".
    - `?category=bar` would output posts in the "bar" category.
 1. Secondly, shortcode attributes ( or data-attributes on the ajax-loop container html ) can be used to filter the default queries on a per-loop basis.
    - `[wpqjx query_var="post_type" query_val="post"][/wpqjx]` will output posts, even if `?wpqjx_post_type=page` is set in the url.
@@ -197,7 +198,7 @@ We can filter the data even more using the localized filters shortcode. For exam
 If we wanted to output pages by default & still have local filters, we could use:
 `[wpqjx post_type="page"][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]`
 
-& if we wanted to get really trick, we could throw a url parameter at it too, but tacking: `?wpqjx_post_type=page` onto the end of our url & then using: `[wpqjx][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]` ( We've used `wpqjx_post_type` as the get param to avoid conflict with Wordpress' built-in `post_type` query param, we could work around this, but it wouldn't necessarily make things better. )
+& if we wanted to get really tricky, we could throw a url parameter at it too, but tacking: `?wpqjx_post_type=page` onto the end of our url & then using: `[wpqjx][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]` ( We've used `wpqjx_post_type` as the get param to avoid conflict with Wordpress' built-in `post_type` query param, we could work around this, but it wouldn't necessarily make things better. )
 
 
 ### Shortcodes Reference / Testing Interface
