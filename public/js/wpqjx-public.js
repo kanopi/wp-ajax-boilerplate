@@ -147,7 +147,7 @@
 		**/
 		loadMore : function( e ) {
 
-			let i = e.target.closest('.wpqjx-wrap').getAttribute( 'wpqjx-wrap--index' );
+			let i = $( e.target ).closest('.wpqjx-wrap').attr( 'wpqjx-wrap--index' );
 
 			wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
 
@@ -645,18 +645,18 @@
 		**/
 		click_filterOptions : function( e ){
 
-			let parentLoop = e.target.closest('.wpqjx-wrap'),
+			let parentLoop = $( e.target ).closest('.wpqjx-wrap'),
 			// Button specifics.
 			queryvar       = e.target.getAttribute( 'data-query_var' ),
 			queryval       = e.target.getAttribute( 'data-query_val' );
 
 			if ( parentLoop ) {
 
-				let i           = e.target.closest('.wpqjx-wrap').getAttribute( 'wpqjx-wrap--index' ),
+				let i           = $( e.target ).closest('.wpqjx-wrap').attr( 'wpqjx-wrap--index' ),
 				// Local wrapper default settings.
 				//
-				parent_queryvar = e.target.closest('.wpqjx-wrap').getAttribute( 'data-query_var' ),
-				parent_queryval = e.target.closest('.wpqjx-wrap').getAttribute( 'data-query_val' );
+				parent_queryvar = $( e.target ).closest('.wpqjx-wrap').attr( 'data-query_var' ),
+				parent_queryval = $( e.target ).closest('.wpqjx-wrap').attr( 'data-query_val' );
 
 				if ( e.target.classList.contains( 'wpqjx-filter--active' ) ) {
 					e.target.classList.remove( 'wpqjx-filter--active' );
