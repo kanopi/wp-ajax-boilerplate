@@ -522,7 +522,7 @@
 
 			if ( sub_params ) {
 				for ( let i in sub_params ) {
-					var item = sub_params[ i ].split( '=' );
+					let item = sub_params[ i ].split( '=' );
 
 					sub_params_out[ item[ 0 ] ] = item[ 1 ].split( ',' );
 				}
