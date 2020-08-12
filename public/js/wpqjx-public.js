@@ -645,7 +645,7 @@
 		**/
 		click_filterOptions : function( e ){
 
-			let parentLoop = $( e.target ).closest('.wpqjx-wrap'),
+			let parentLoop = e.target.closest('.wpqjx-wrap'),
 			// Button specifics.
 			queryvar       = e.target.getAttribute( 'data-query_var' ),
 			queryval       = e.target.getAttribute( 'data-query_val' );
@@ -843,10 +843,13 @@
 					default:
 
 						if ( e.target.classList.contains( 'wpqjx-filter--active' ) ) {
+							console.log("e.target.classList.contains( 'wpqjx-filter--active")
 							wpAjax.removeUrlParam( e );
 						} else {
+							console.log("else")
 							wpAjax.addUrlParam( e );
 						}
+
 
 				}
 
