@@ -371,10 +371,16 @@
 				noprefix_index = null;
 
 			if( wpAjax.vars.params.length ) {
-				if( ! wpAjax.isEmpty(wpAjax.vars.loops[i].vars.query_params) ) {
-					for (let index in wpAjax.vars.loops[i].vars.query_params) {
+				if( ! wpAjax.isEmpty( wpAjax.vars.loops[i].vars.query_params ) ) {
+					for ( let index in wpAjax.vars.loops[i].vars.query_params ) {
 
-						noprefix_index = index.replace('wpqjx_', '');
+						let noprefix_index = index.replace('wpqjx_', ''),
+						    queryvar       = wpAjax.vars.containerWraps[ i ].getAttribute( 'data-query_var' ),
+						    queryval       = wpAjax.vars.containerWraps[ i ].getAttribute( 'data-query_val' );
+
+						if ( queryvar === noprefix_index ) {
+							break;
+						}
 
 						switch (index) {
 
