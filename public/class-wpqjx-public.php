@@ -308,36 +308,4 @@ class Wpqjx_Public {
 
 	}
 
-	/**
-	* Search Within a Taxonomy
-	*
-	* Support search with tax_query args
-	*
-	* $query = new WP_Query( array(
-	*  'search_tax_query' => true,
-	*  's' => $keywords,
-	*  'tax_query' => array( array(
-	*      'taxonomy' => 'country',
-	*      'field' => 'id',
-	*      'terms' => $country,
-	*  ) ),
-	* ) );
-	*/
-	public function taxosearch_groupby( $q ) {
-		if ( is_admin() ) {
-			return;
-		}
-
-		$wp_query_search_tax_query = filter_var( $q->get( 'search_tax_query' ), FILTER_VALIDATE_BOOLEAN );
-
-		// WP_Query has 'tax_query', 's' and custom 'search_tax_query' argument passed.
-		if ( $wp_query_search_tax_query && $q->get( 'tax_query' ) && $q->get( 's' ) ) {
-			add_filter( 'posts_groupby', [ $this, 'taxosearch_posts_groupby' ], 10, 1 );
-		}
-	}
-
-	public function taxosearch_posts_groupby( $groupby ) {
-		return '';
-	}
-
 }

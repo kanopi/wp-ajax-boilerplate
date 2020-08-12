@@ -180,8 +180,6 @@ class Wpqjx {
 
 		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_shortcode' );
 
-		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'taxosearch_groupby' );
-
 	}
 
 	/**
