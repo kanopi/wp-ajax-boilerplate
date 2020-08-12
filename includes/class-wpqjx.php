@@ -179,7 +179,6 @@ class Wpqjx {
 		$this->loader->add_action( 'wp_ajax_nopriv_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
 
 		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_shortcode' );
-		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_filter_shortcode' );
 
 		$this->loader->add_action( 'pre_get_posts', $plugin_public, 'taxosearch_groupby' );
 
