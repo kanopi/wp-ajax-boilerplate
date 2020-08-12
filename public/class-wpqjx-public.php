@@ -218,12 +218,8 @@ class Wpqjx_Public {
 	}
 
 	/**
-	* Add Wp Ajax Shortcode
+	* Wp Ajax Filter Shortcode
 	*/
-	public function add_wpqjx_shortcode() {
-		add_shortcode( 'wpqjx', [ $this, 'wpqjx_shortcode' ] );
-	}
-
 	function wpqjx_filter_shortcode( $props ) {
 
 		$props = shortcode_atts( [
@@ -300,8 +296,16 @@ class Wpqjx_Public {
 		return ob_get_clean();
 	}
 
-	public function add_wpqjx_filter_shortcode() {
-		add_shortcode('wpqjx_filter',[$this,'wpqjx_filter_shortcode']);
+
+	/**
+	* Add Shortcodes
+	*/
+	public function add_wpqjx_shortcode() {
+
+		add_shortcode( 'wpqjx', [ $this, 'wpqjx_shortcode' ] );
+
+		add_shortcode( 'wpqjx_filter', [ $this, 'wpqjx_filter_shortcode' ] );
+
 	}
 
 	/**
