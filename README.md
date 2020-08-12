@@ -1,6 +1,6 @@
 # WP Query javaScript & XML ( _wpqjx_ / wp-ajax-boilerplate )
 
-A collection of tools for interfacing with wp-query asynchronously.
+## A collection of tools for interfacing with wp-query asynchronously.
 
 > Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wpqjx/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wpqjx/blob/master/public/class-wpqjx-public.php).
 > Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
@@ -12,7 +12,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 1. Add ajax-output markup to site via html or shortcode
 1. Ajax output can be filtered via get-params, element-attributes, & at runtime
 
-## Basic usage / quickstart
+### Basic usage / quickstart
 > Add the html below to a post or page ( or use the `[wpqjx][/wpqjx]` shortcode )
 ```
 <!-- post_type attribute adds default local filters -->
@@ -23,7 +23,7 @@ A collection of tools for interfacing with wp-query asynchronously.
 </div>
 ```
 
-#### Output can be filtered
+### Output can be filtered
 1. Firstly, url-params can be used to modify the default (initial, on page-load) queries of all ajax-output on the page.
    - `?wpqjx_post_type=post&wpqjx_post_tag=foo` would output posts with the tag "foo".
    - `?category=bar` would output posts in the "bar" category.
