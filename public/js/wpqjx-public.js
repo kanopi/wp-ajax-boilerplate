@@ -149,7 +149,7 @@
 
 			let i = $( e.target ).closest('.wpqjx-wrap').attr( 'wpqjx-wrap--index' );
 
-			wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
+			// wpAjax.vars.loops[i].vars.args['page'] = wpAjax.vars.page;
 
 			wpAjax.vars.loops[i].vars.query = JSON.stringify( wpAjax.vars.loops[i].vars.args );
 

@@ -4,7 +4,7 @@
  * The file that defines the core plugin class
  *
  * A class definition that includes attributes and functions used across both the
- * public-facing side of the site and the admin area.
+ * public-facing side of the site.
  *
  * @link       https://kanopistudios.com
  * @since      1.0.0
@@ -16,8 +16,7 @@
 /**
  * The core plugin class.
  *
- * This is used to define internationalization, admin-specific hooks, and
- * public-facing site hooks.
+ * This is used to define internationalization and public-facing site hooks.
  *
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
@@ -76,7 +75,6 @@ class Wpqjx {
 
 		$this->load_dependencies();
 		$this->set_locale();
-		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
 	}
@@ -112,11 +110,6 @@ class Wpqjx {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-wpqjx-i18n.php';
 
 		/**
-		 * The class responsible for defining all actions that occur in the admin area.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-wpqjx-admin.php';
-
-		/**
 		 * The class responsible for defining all actions that occur in the public-facing
 		 * side of the site.
 		 */
@@ -144,25 +137,6 @@ class Wpqjx {
 	}
 
 	/**
-	 * Register all of the hooks related to the admin area functionality
-	 * of the plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 */
-	private function define_admin_hooks() {
-
-		$plugin_admin = new Wpqjx_Admin( $this->get_plugin_name(), $this->get_version() );
-		$plugin_public = new Wpqjx_Public( $this->get_plugin_name(), $this->get_version() );
-
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-
-		$this->loader->add_action( 'wp_ajax_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
-
-	}
-
-	/**
 	 * Register all of the hooks related to the public-facing functionality
 	 * of the plugin.
 	 *
@@ -173,9 +147,9 @@ class Wpqjx {
 
 		$plugin_public = new Wpqjx_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
+		$this->loader->add_action( 'wp_ajax_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
 		$this->loader->add_action( 'wp_ajax_nopriv_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
 
 		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_shortcode' );

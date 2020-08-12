@@ -55,29 +55,6 @@ class Wpqjx_Public {
 	}
 
 	/**
-	* Register the stylesheets for the public-facing side of the site.
-	*
-	* @since    1.0.0
-	*/
-	public function enqueue_styles() {
-
-		/**
-		* This function is provided for demonstration purposes only.
-		*
-		* An instance of this class should be passed to the run() function
-		* defined in Wp_Ajax_Loader as all of the hooks are defined
-		* in that particular class.
-		*
-		* The Wp_Ajax_Loader will then create the relationship
-		* between the defined hooks and the functions defined in this
-		* class.
-		*/
-
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpqjx-public.css', array(), $this->version, 'all' );
-
-	}
-
-	/**
 	* Register the JavaScript for the public-facing side of the site.
 	*
 	* @since    1.0.0
@@ -200,7 +177,7 @@ class Wpqjx_Public {
 		if ( ! empty( $attrs[ 'query_var' ] ) && ! empty( $attrs[ 'query_val' ] ) ) {
 			echo '<div class="wpqjx-wrap" data-query_var="' . $attrs[ 'query_var' ] . '" data-query_val="' . $attrs[ 'query_val' ] . '">';
 		} else {
-			echo '<div>';
+			echo '<div class="wpqjx-wrap">';
 		}
 
 		if ( ! empty( $content ) ) {
