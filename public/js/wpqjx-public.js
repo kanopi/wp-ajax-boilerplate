@@ -705,6 +705,7 @@
 								currentRules.push( queryval );
 
 							} else {
+
 								if ( currentRules.length ) {
 									for ( let j = currentRules.length; j --; ) {
 										if ( currentRules[ j ] === queryval ) {
@@ -712,6 +713,7 @@
 										}
 									}
 								}
+
 							}
 
 							if ( currentRules.length ) {
@@ -781,7 +783,9 @@
 														wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].splice( j, 1 );
 
 														if ( wpAjax.vars.loops[i].vars.args['tax_query'][ rule ][ 'terms' ].length < 1 ) {
+
 															delete wpAjax.vars.loops[i].vars.args['tax_query'][ rule ];
+
 														}
 
 													}
