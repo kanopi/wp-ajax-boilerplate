@@ -150,6 +150,7 @@ class Wpqjx {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		$this->loader->add_action( 'wp_ajax_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
+		
 		$this->loader->add_action( 'wp_ajax_nopriv_admin_ajax_handler', $plugin_public, 'admin_ajax_handler' );
 
 		$this->loader->add_action( 'init', $plugin_public, 'add_wpqjx_shortcode' );
