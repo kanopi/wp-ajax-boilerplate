@@ -658,11 +658,11 @@
 
 			if ( parentLoop ) {
 
-				let i           = $( e.target ).closest('.wpqjx-wrap').attr( 'wpqjx-wrap--index' ),
+				let i           = parentLoop.getAttribute( 'wpqjx-wrap--index' ),
 				// Local wrapper default settings.
 				//
-				parent_queryvar = $( e.target ).closest('.wpqjx-wrap').attr( 'data-query_var' ),
-				parent_queryval = $( e.target ).closest('.wpqjx-wrap').attr( 'data-query_val' );
+				parent_queryvar = parentLoop.getAttribute( 'data-query_var' ),
+				parent_queryval = parentLoop.getAttribute( 'data-query_val' );
 
 				if ( e.target.classList.contains( 'wpqjx-filter--active' ) ) {
 					e.target.classList.remove( 'wpqjx-filter--active' );
