@@ -26,7 +26,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 > Add the html below to a post or page ( or use the `[wpqjx][/wpqjx]` shortcode )
 ```
 <!-- post_type attribute adds default local filters -->
-<div class="wpqjx-wrap" data-query_var="post_type" data-query_val="post">
+<div class="wpqjx-wrap">
     <div class="wpqjx-feed">
     </div>
     <button class="wpqjx-load">load more</button>
@@ -84,24 +84,7 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 <button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
 <button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 
-<p>.wpqjx-filter inside .wpqjx-wrap will modify query within parent .wpqjx-wrap &  post_type="" or posts_per_page="" wrapper-attributes pre-define filtering within global-scope & above runtime filters</p>
-<div class="wpqjx-wrap" data-query_var="post_type" data-query_val="page">
-	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
-	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
-	<div class="wpqjx-feed">
-	</div>
-	<button class="wpqjx-load">load more</button>
-</div>
-
-<p>post_type attribute adds default local filters</p>
-<div class="wpqjx-wrap"  data-query_var="post_type" data-query_val="post">
-	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
-	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
-	<div class="wpqjx-feed">
-	</div>
-	<button class="wpqjx-load">load more</button>
-</div>
-
+<p>.wpqjx-filter inside .wpqjx-wrap will modify query within parent .wpqjx-wrap</p>
 <div class="wpqjx-wrap">
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
@@ -110,8 +93,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	<button class="wpqjx-load">load more</button>
 </div>
 
-<p>taxo & term attributes adds default tax-query</p>
-<div class="wpqjx-wrap" data-query_var="post_tag" data-query_val="lorem">
+<p>post_type attribute adds default local filters</p>
+<div class="wpqjx-wrap" data-query_var="post_type" data-query_val="page">
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="post">post</button>
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_type" data-query_val="page">page</button>
 	<div class="wpqjx-feed">
@@ -119,11 +102,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 	<button class="wpqjx-load">load more</button>
 </div>
 
-<p>.wpqjx-filter inside .wpqjx-wrap, local tax_query control</p>
+<p>use category or tag & term attributes</p>
 <div class="wpqjx-wrap" data-query_var="post_tag" data-query_val="lorem">
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_tag" data-query_val="lorem">lorem</button>
 	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_tag" data-query_val="ipsum">ipsum</button>
-	<button class="wpqjx-filter wpqjx-filter--inactive" data-query_var="post_tag" data-query_val="set">set</button>
 	<div class="wpqjx-feed">
 	</div>
 	<button class="wpqjx-load">load more</button>
@@ -177,28 +159,19 @@ If we wanted to output pages by default & still have local filters, we could use
 ```
 [wpqjx_filter query_var="post_type" query_val="post,page"]
 
+[wpqjx]
+  [wpqjx_filter query_var="post_type" query_val="post,page"]
+[/wpqjx]
+
 [wpqjx query_var="post_type" query_val="page"]
   [wpqjx_filter query_var="post_type" query_val="post,page"]
 [/wpqjx]
 
-[wpqjx query_var="post_type" query_val="post"]
-  [wpqjx_filter query_var="post_type" query_val="post,page"]
+[wpqjx query_var="post_tag" query_val="lorem"]
+  [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum"]
 [/wpqjx]
 
-[wpqjx][wpqjx_filter query_var="post_type" query_val="post,page"][/wpqjx]
-
-[wpqjx_filter query_var="category" query_val="lorem,ipsum,set"]
-[wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
-
-[wpqjx query_var="post_tag" query_val="lorem,ipsum,set"]
-  [wpqjx_filter query_var="post_type" query_val="post,page"]
-[/wpqjx]
-
-[wpqjx query_var="post_tag" query_val="lorem,ipsum,set"]
-  [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
-[/wpqjx]
-
-[wpqjx query_var="post_tag" query_val="lorem,ipsum"]
+[wpqjx query_var="post_tag" query_val="lorem"]
     [wpqjx_filter query_var="category" query_val="animals,cats,dogs"]
     [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
 [/wpqjx]
