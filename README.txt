@@ -8,12 +8,9 @@ Stable tag: 4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-# WP Query javaScript & XML ( _wpqjx_ / wp-ajax-boilerplate )
+# WP Query javaScript & XML ( _wpqjx_ / `wp-ajax-boilerplate` )
 
 ## A collection of tools for interfacing with wp-query asynchronously.
-
-> Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wpqjx/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wpqjx/blob/master/public/class-wpqjx-public.php).
-> Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
 
 ## Setup
 
@@ -176,3 +173,8 @@ If we wanted to output pages by default & still have local filters, we could use
     [wpqjx_filter query_var="post_tag" query_val="lorem,ipsum,set"]
 [/wpqjx]
 ```
+
+#### Dev Notes
+
+> Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wpqjx/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wpqjx/blob/master/public/class-wpqjx-public.php).
+> Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
