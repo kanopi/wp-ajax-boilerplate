@@ -12,7 +12,6 @@
 ### Basic usage / quickstart
 > Add the html below to a post or page ( or use the `[wpqjx][/wpqjx]` shortcode )
 ```
-<!-- post_type attribute adds default local filters -->
 <div class="wpqjx-wrap">
     <div class="wpqjx-feed">
     </div>
