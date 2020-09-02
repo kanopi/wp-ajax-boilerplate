@@ -177,3 +177,4 @@ If we wanted to output pages by default & still have local filters, we could use
 
 > Custom functionality located in [/public/js/wpqjx-public.js](https://github.com/kanopi/wpqjx/blob/master/public/js/wpqjx-public.js) & [/public/class-wpqjx-public.php](https://github.com/kanopi/wpqjx/blob/master/public/class-wpqjx-public.php).
 > Plugin framework courtesy of [WordPress-Plugin-Boilerplate](https://github.com/devinvinson/WordPress-Plugin-Boilerplate/)
+> building/editing wp-query on browser-side and what you want server-side, how cool is that?
