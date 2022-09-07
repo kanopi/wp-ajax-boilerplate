@@ -116,6 +116,7 @@ class Wpqjx_Public {
 			$info->found_posts = $wp_query->found_posts;
 			$info->wp_query    = $wp_query;
 			$return_json->info = $info;
+			$return_json->loop = (object) [];
 
 			while ( have_posts() ) {
 
